@@ -1,3 +1,6 @@
+// WF 2023051604037
+// edit at 2025/6/19
+// correct some liitle logic error
 #include "loadtxt.h"
 #include <QFile>
 #include <QDir>
@@ -59,8 +62,9 @@ bool LoadTxt::processText(const QString& filepath)
         if (line.first(1) != "第" && line.first(1) != "前")  continue; // 第一章， 前言
         else if (line.length() > 30) continue;
 
-        m_chapterCount++;
         int spacePos = line.lastIndexOf(" ");
+        if (spacePos == -1) continue;
+        m_chapterCount++;
         title = line.last(line.length() - spacePos);
         title = tr("第%1章 %2").arg(m_chapterCount).arg(title);
 
@@ -91,6 +95,8 @@ bool LoadTxt::processText(const QString& filepath)
         else if (line.first(1) == "第")
         {
             if (line.length() > 24) continue;
+            int spacePos = line.lastIndexOf(" ");
+            if (spacePos == -1) continue;
 
             // write context to file
             if (!writeChapter(context, title)) {
@@ -102,7 +108,6 @@ bool LoadTxt::processText(const QString& filepath)
 
             // next chapter
             m_chapterCount++;
-            int spacePos = line.lastIndexOf(" ");
             title = line.last(line.length() - spacePos);
             title = tr("第%1章 %2").arg(m_chapterCount).arg(title);
         }
