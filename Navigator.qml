@@ -3,19 +3,27 @@
 import QtQuick
 
 Rectangle {
-    id:navigator
     height: 60
     anchors.right: parent.right; anchors.left: parent.left
     anchors.bottom: parent.bottom
     radius: 10
+
+    signal navigate(target: int)
+    required property int page
 
     Icon {
         id: listen
         height: 40; width: 34
         anchors.left: parent.left; anchors.leftMargin: parent.width/10
         anchors.verticalCenter: parent.verticalCenter
-        src: "img/listen.png"
-        onClicked: console.log("listen")
+
+        src: (page === 1) ? "img/onlitsen.png" : "img/litsen.png"
+        bounce: 1.01
+
+        onClicked: {
+            navigate(1)
+            console.log("listen")
+        }
     }
 
     Icon {
@@ -23,8 +31,14 @@ Rectangle {
         height: 40; width: 34
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        src: "img/read.png"
-        onClicked: console.log("read")
+
+        src: (page === 2) ? "img/onread.png" : "img/read.png"
+        bounce: 1.01
+
+        onClicked: {
+            navigate(2)
+            console.log("read")
+        }
     }
 
 
@@ -33,7 +47,13 @@ Rectangle {
         height: 40; width: 34
         anchors.right: parent.right; anchors.rightMargin: parent.width/10
         anchors.verticalCenter: parent.verticalCenter
-        src: "img/user.png"
-        onClicked: console.log("user")
+
+        src: (page === 3) ? "img/onuser.png" : "img/user.png"
+        bounce: 1.01
+
+        onClicked: {
+            navigate(3)
+            console.log("user")
+        }
     }
 }

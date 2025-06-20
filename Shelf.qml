@@ -5,12 +5,13 @@ import QtQuick.Controls
 
 Rectangle {
     id: bookshelf
-    width: 360
-    height: 760
-    visible: true
-    color: "#FAFAFA"
+    anchors.top: parent.top
+    anchors.left: parent.left;  anchors.right: parent.right
+    color: bg    // bg
+    property color bg: "#FAFAFA"
 
-    signal openBook(txtSrc: url)
+    signal openBook(id: int)
+    signal search
 
     //search
     Rectangle {
@@ -52,7 +53,7 @@ Rectangle {
         id: select
         anchors.top: search.bottom; anchors.topMargin: 14
         anchors.right: search.right
-        color: "#FAFAFA"    // bg
+        color: bg    // bg
         height: 20; width: sltText.width + 24
 
         Text {
@@ -66,7 +67,7 @@ Rectangle {
             anchors.right: sltText.left;  anchors.rightMargin: 4
             anchors.verticalCenter: sltText.verticalCenter
             height: 20; width: 20
-            color: "#FAFAFA"    // bg
+            color: bg    // bg
         }
     }
 
@@ -75,7 +76,7 @@ Rectangle {
         id: imprt
         anchors.top: select.top
         anchors.right: select.left;    anchors.rightMargin: 30
-        color: "#FAFAFA"    // bg
+        color: bg    // bg
         height: 20; width: iptText.width + 24
 
         Text {
@@ -89,7 +90,7 @@ Rectangle {
             anchors.right: iptText.left;  anchors.rightMargin: 4
             anchors.verticalCenter: iptText.verticalCenter
             height: 20; width: 20
-            color: "#FAFAFA"    // bg
+            color: bg    // bg
         }
     }
 
@@ -98,7 +99,7 @@ Rectangle {
         id: choices
         anchors.left: search.left;  anchors.leftMargin: 8
         anchors.top: select.bottom; anchors.topMargin: 14
-        color: "#FAFAFA"
+        color: bg
         height: 20; width: history.width + join.width + progress.width
 
         Text {
@@ -174,7 +175,7 @@ Rectangle {
         id: group
         anchors.top: choices.top
         anchors.right: parent.right;    anchors.rightMargin: 28
-        color: "#FAFAFA"
+        color: bg
         height: 20
 
         Icon {
@@ -183,7 +184,7 @@ Rectangle {
             height: 8;  width: 23
             anchors.right: parent.right
             anchors.verticalCenter: grp.verticalCenter
-            color: "#FAFAFA"
+            color: bg
         }
         Text {
             id: grp
@@ -200,24 +201,24 @@ Rectangle {
         id: shelf
         anchors.top: choices.bottom;    anchors.topMargin: 10
         anchors.left: search.left;      anchors.right: search.right
-        anchors.bottom: navigator.top
+        anchors.bottom: parent.bottom
+        clip: true
 
-        cellHeight: 170;    cellWidth: 108
-        model: BookModel {}
+        cellHeight: 90;    cellWidth: 120
+        model: bookModel
         delegate: Column {
             id: settype
-            required property string coverSrc
-            required property url txtSrc
+            required property int bookId
             required property string bkname
             Image {
                 id: cover
-                source: coverSrc
-                anchors.top: parent.top
-                anchors.left: parent.left; anchors.right: parent.right
-                height: 144     // 3:4
+                source: "img/0.jpg"
+                height: 140     // 3:4
+
+                property string bkImg
+                bkImg: "books/" + bookId + "/0.jpg"
             }
             Rectangle {
-                anchors.left: parent.left; anchors.right: parent.right
                 height: 6
                 gradient: Gradient {
                     GradientStop {position: 0; color: "#1E1E1E"}
@@ -226,20 +227,23 @@ Rectangle {
                 opacity: 0.2
             }
             Text {
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
                 text: bkname
                 font.pixelSize: 16
                 color: "#636363"
             }
             TapHandler {
-                onTapped: bookshelf.openBook(txtSrc)
+                onTapped: bookshelf.openBook(bookId)
             }
         }
+        property real itemWidth: (parent.width - 40) / 3
+        property real itemHeight: itemWidth / 3 * 4
+    }
+    ListModel {
+        id: bookModel
     }
 
-    // navigator
-    Navigator {
-        id: navigator
+    // test
+    Component.onCompleted:  {
+        bookModel.append({"bookId":1, "bkname":"笔记簿"})
     }
 }

@@ -42,7 +42,7 @@ bool BookListManager::initBookList()
     QJsonArray info;
 
     QJsonObject newBook;
-    newBook["id"] = 0;
+    newBook["bookId"] = 1;
     newBook["name"] = "笔记簿";
     newBook["exist"] = true;
     newBook["progress"] = 0;

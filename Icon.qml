@@ -5,7 +5,9 @@ import QtQuick
 
 Rectangle {
     required property string src
+    property real bounce: 1.05
     signal clicked
+
     Image {
         id: listenImg
         source: src
@@ -28,17 +30,33 @@ Rectangle {
 
     SequentialAnimation {
         id: clickAnimation
-        PropertyAnimation {
-            target: mask
-            property: "opacity"
-            to: 0.4
-            duration: 150
+        ParallelAnimation {
+            PropertyAnimation {
+                target: mask
+                property: "opacity"
+                to: 0.4
+                duration: 150
+            }
+            PropertyAnimation {
+                target: parent
+                property: "scale"
+                to: bounce
+                duration: 150
+            }
         }
-        PropertyAnimation {
-            target: mask
-            property: "opacity"
-            to: 0
-            duration: 350
+        ParallelAnimation {
+            PropertyAnimation {
+                target: mask
+                property: "opacity"
+                to: 0
+                duration: 350
+            }
+            PropertyAnimation {
+                target: parent
+                property: "scale"
+                to: 1
+                duration: 350
+            }
         }
     }
 }

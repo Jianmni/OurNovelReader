@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>img/ic_bookCover.png</file>
+        <file>img/ic_downArrow.png</file>
+        <file>img/ic_editInfo.png</file>
+        <file>img/ic_evlp.png</file>
+        <file>img/ic_import.png</file>
+        <file>img/ic_search.png</file>
+        <file>img/ic_select.png</file>
+        <file>img/ic_set.png</file>
+        <file>img/ic_top.png</file>
+        <file>img/litsen.png</file>
+        <file>img/onlitsen.png</file>
+        <file>img/onread.png</file>
+        <file>img/onuser.png</file>
+        <file>img/read.png</file>
+        <file>img/user.png</file>
+    </qresource>
+</RCC>

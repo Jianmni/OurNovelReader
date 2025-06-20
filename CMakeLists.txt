@@ -17,6 +17,18 @@ qt_add_qml_module(appNovelReader
     VERSION 1.0
     QML_FILES
     NovelReader.qml
+    SOURCES
+    QML_FILES
+SOURCES
+SOURCES booklistmanager.cpp booklistmanager.h bookmanager.cpp bookmanager.h
+QML_FILES  Shelf.qml
+SOURCES loadtxt.cpp loadtxt.h
+QML_FILES Icon.qml Navigator.qml
+RESOURCES
+QML_FILES Info.qml
+RESOURCES img/0.png img/ic_downArrow.png img/ic_editInfo.png img/ic_evlp.png img/ic_import.png img/ic_search.png img/ic_select.png img/ic_set.png img/ic_top.png img/litsen.png img/onlitsen.png img/onread.png img/onuser.png img/read.png img/user.png
+QML_FILES
+RESOURCES img/head.jpg img/0.jpg
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
