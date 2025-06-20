@@ -4,13 +4,15 @@
 #include <QDir>
 
 // my component
-//#include "bookmanager.h"
+#include "bookmanager.h"
+#include "booklistmanager.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    //qmlRegisterType<BookManager>("BookManager", 1, 0, "BookManager");
+    qmlRegisterType<BookManager>("BookManager", 1, 0, "BookManager");
+    qmlRegisterType<BookListManager>("BookListManager", 1, 0, "BookListManager");
 
     QQmlApplicationEngine engine;
 

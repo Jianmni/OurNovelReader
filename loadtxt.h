@@ -13,20 +13,19 @@ public:
 
     Q_INVOKABLE bool loadLocalBook(const QString& filepath, int id);
     void createFiles();
+    // void copyCover();
 
     bool processText(const QString& filepath);
     bool writeChapter(const QStringList& context, const QString& title);
-    void deleteAll();
+    void deleteBook();
+    void deleteBook(int id);
 
 signals:
-    void loadComplete();
     void shouldInit();
-    void loadFailed();
 
 private:
-    QString m_bookName;
-    int m_chapterCount;
-    QString m_bookDir;
+    int m_chapterCount = 0;
+    QString m_bookDir = ".";
 
-    QStringList m_content;
+    QStringList m_content {};
 };

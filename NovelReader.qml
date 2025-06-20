@@ -1,7 +1,10 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
+import BookManager
 
 ApplicationWindow {
+    id: novelReader
     width: 330
     height: 680
     visible: true
@@ -19,15 +22,32 @@ ApplicationWindow {
     // ...
 
     // shelf
-    signal search
-    signal importBooks
-    signal selectBooks
-    signal bookOrderChanged(type: int)
-    signal bookOpened(id: int)
     // ...
 
     // info
     // ...
+
+
+    // book manager
+    // manage bool' import, load and delete
+    BookManager {
+        id: fileReader
+
+        onAddFinished: {
+            console.log("Finished")
+        }
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Select a text file"
+        nameFilters: ["Text files (*.txt)", "All files (*)"]
+        onAccepted: {
+            console.log(selectedFile)
+            let path = selectedFile.toString()
+            fileReader.loadLocalFile(path)
+        }
+    }
 
     StackView {
         id: screenView
@@ -72,14 +92,18 @@ ApplicationWindow {
     }
 
 
-    // Pages
+    /************************************* Pages ****************************************/
     // shelf pages
     Component {
         id: shelf
         Page {
+            id: page
             Shelf {
                 id: body
                 anchors.bottom: shelfNavi.top
+
+                // signals
+                onImportBooks: fileDialog.open()
             }
             Navigator {
                 id: shelfNavi
@@ -94,6 +118,8 @@ ApplicationWindow {
             }
         }
     }
+
+    // info pages
     Component {
         id: info
         Page {
@@ -114,5 +140,4 @@ ApplicationWindow {
             }
         }
     }
-
 }

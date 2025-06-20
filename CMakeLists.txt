@@ -29,6 +29,7 @@ QML_FILES Info.qml
 RESOURCES img/0.png img/ic_downArrow.png img/ic_editInfo.png img/ic_evlp.png img/ic_import.png img/ic_search.png img/ic_select.png img/ic_set.png img/ic_top.png img/litsen.png img/onlitsen.png img/onread.png img/onuser.png img/read.png img/user.png
 QML_FILES
 RESOURCES img/head.jpg img/0.jpg
+SOURCES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

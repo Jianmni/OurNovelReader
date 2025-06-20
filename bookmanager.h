@@ -3,6 +3,8 @@
 // manage the opaeration of load local txt
 #pragma once
 #include <QObject>
+#include <QList>
+#include <QVariant>
 
 #include "loadtxt.h"
 #include "booklistmanager.h"
@@ -14,12 +16,17 @@ public:
 
     Q_INVOKABLE void loadLocalFile(const QString &fileUrl);
     // Q_INVOKABLE void loadCover();    // select cover for local book
+    Q_INVOKABLE void deleteBook(int id);
+    Q_INVOKABLE QList<QVariant> shelfBooksReadOrder();
+    Q_INVOKABLE QList<QVariant> shelfBooksJoinOrder();
 
 private:
     void loadTxtFile(const QString &path);
 
 signals:
-    void addFinished();
+    void getbookReadOrder();
+    void getbookJoinOrder();
+    void addFinished(int bookId, QString bkname);
 
 private:
     LoadTxt m_loadTxt;

@@ -7,14 +7,8 @@
 BookManager::BookManager(QObject *parent)
     : QObject(parent)
 {
-    if (m_bookList.load())
-    {
-        QDir dir;
-        dir.mkdir("books/1");
-        QFile note("books/1/0.txt");
-        note.open(QIODeviceBase::NewOnly);
-        // copy init info in Qt src
-    }
+    m_bookList.load();
+
     connect(&m_loadTxt, &LoadTxt::shouldInit, &m_bookList, &BookListManager::initBookList);
 }
 
@@ -32,13 +26,27 @@ void BookManager::loadLocalFile(const QString &fileUrl) {
     // else if (type == "pdf") // load pdf
 }
 
+void BookManager::deleteBook(int id)
+{
+    m_bookList.deleteBook(id);
+    m_loadTxt.deleteBook(id);
+}
+
+QList<QVariant> BookManager::shelfBooksReadOrder()
+{
+    return m_bookList.getReadOrder();
+}
+
+QList<QVariant> BookManager::shelfBooksJoinOrder()
+{
+    return m_bookList.getJoinOrder();
+}
+
 void BookManager::loadTxtFile(const QString &path)
 {
     int id = m_bookList.bookSum();
     if (!m_loadTxt.loadLocalBook(path, id+1))
-    {
         return;
-    }
 
     // book name                                    // .../download/Love.txt
     QString bkname = "佚名";
@@ -52,5 +60,5 @@ void BookManager::loadTxtFile(const QString &path)
 
     // load cover img
 
-    emit addFinished();
+    emit addFinished(id, bkname);
 }

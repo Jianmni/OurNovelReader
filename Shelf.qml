@@ -2,6 +2,7 @@
 // this file builds the UI of read interface
 import QtQuick
 import QtQuick.Controls
+import BookListManager
 
 Rectangle {
     id: bookshelf
@@ -12,6 +13,9 @@ Rectangle {
 
     signal openBook(bookId: int)
     signal search
+    signal importBooks
+    signal selectBooks
+    signal bookOrderChanged(type: int)
 
     //search
     Rectangle {
@@ -45,6 +49,10 @@ Rectangle {
             anchors.verticalCenter: srchText.verticalCenter
             font.pointSize: 10
             color: "#757575"
+        }
+
+        TapHandler {
+            onTapped: bookshelf.search()
         }
     }
 
@@ -86,11 +94,16 @@ Rectangle {
             font.pixelSize: 15
         }
         Icon {
+            id: icon
             src: "img/ic_import.png"
             anchors.right: iptText.left;  anchors.rightMargin: 4
             anchors.verticalCenter: iptText.verticalCenter
             height: 20; width: 20
             color: bg    // bg
+        }
+
+        TapHandler {
+            onTapped: bookshelf.importBooks()
         }
     }
 
@@ -218,11 +231,18 @@ Rectangle {
                 anchors.top: parent.top
                 anchors.right: parent.right;    anchors.left: parent.left
                 height: parent.width / 3 * 4     // 3:4
+                /*
                 property string bkImg
                 bkImg: appPath + "/books/" + bookId + "/0.jpg"
                 Icon {
                     anchors.fill: parent
                     src: Qt.url("file:///" + cover.bkImg)
+                    bounce: 1.01
+                }
+                */
+                Icon {
+                    anchors.fill: parent
+                    src: "img/0.jpg"
                     bounce: 1.01
                 }
             }
@@ -241,7 +261,7 @@ Rectangle {
             Text {
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right;    anchors.left: parent.left
-                text: bkname
+                text: settype.bkname
                 font.pixelSize: 16
                 color: "#636363"
             }
@@ -249,7 +269,7 @@ Rectangle {
                 onTapped: bookshelf.openBook(bookId)
             }
         }
-        property real itemWidth: (shelf.width - 40) / 3
+        property real itemWidth: (shelf.width - 30) / 3
         property real itemHeight: itemWidth / 3 * 4 + 26
     }
     ListModel {
@@ -257,7 +277,28 @@ Rectangle {
     }
 
     // test
-    Component.onCompleted:  {
-        bookModel.append({"bookId":1, "bkname":"笔记簿"})
+    signal initShelf()
+    Component.onCompleted: initShelf()
+    onInitShelf: {
+        // bookModel.append({"bookId":1, "bkname":"笔记簿"})
+        bookHome.load()
+        var data = bookHome.getReadOrder()
+        addBookToShelf(data)
+    }
+
+    function addBookToShelf(data: var) {
+        for (var i=0; i < data.length; ++i)
+        {
+            var bkname, bookId;     // 1,笔记簿,2,BookName
+            bookId = Number(data[i])
+            i += 1;
+            bkname = String(data[i])
+            console.log("字符串:", bkname, "id:", bookId)
+            bookModel.append({"bookId" : bookId, "bkname" : bkname })
+        }
+    }
+
+    BookListManager {
+        id: bookHome
     }
 }

@@ -13,7 +13,7 @@ bool LoadTxt::loadLocalBook(const QString &filepath, int id)
     /* prepare  */
     m_chapterCount = 0;
     m_bookDir = tr("books/%1/").arg(id); // ./books/20 dir
-    qDebug() << m_bookDir;
+    qDebug() << "On LoadTxt::loadLocalBook: m_bookDir" << m_bookDir;
     m_content.clear();
 
     // create files to store txt info and context
@@ -32,8 +32,8 @@ void LoadTxt::createFiles()
     }
 
     cur.mkdir(m_bookDir);
-    qDebug() << "On LoadTxt createFiles: mkdir";
-    QFile first(m_bookDir+"0.txt");
+    qDebug() << "On LoadTxt createFiles: mkdir" << m_bookDir;
+    QFile first(m_bookDir+"0.txt");     // for content
     first.open(QIODeviceBase::NewOnly);
 }
 
@@ -43,8 +43,7 @@ bool LoadTxt::processText(const QString& filepath)
     if (!text.open(QIODeviceBase::ReadOnly | QIODeviceBase::Text))
     {
         qWarning() << "On LoadTxt processTxt: File open failed: " + filepath;
-        emit loadFailed();
-        deleteAll();
+        deleteBook();
         return false;
     }
     QTextStream in(&text);
@@ -76,8 +75,7 @@ bool LoadTxt::processText(const QString& filepath)
     if (count == 100)
     {
         qDebug() << "On LoadTxt processTxt:(count == 100): " << (count == 100);
-        emit loadFailed();
-        deleteAll();
+        deleteBook();
         return false;
     }
 
@@ -100,8 +98,7 @@ bool LoadTxt::processText(const QString& filepath)
 
             // write context to file
             if (!writeChapter(context, title)) {
-                deleteAll();
-                emit loadFailed();
+                deleteBook();
                 return false;
             }
             context.clear();        // clear for next chapter
@@ -121,8 +118,7 @@ bool LoadTxt::processText(const QString& filepath)
     }
     if (!context.isEmpty())
         if (!writeChapter(context, title)) {
-            deleteAll();
-            emit loadFailed();
+            deleteBook();
             return false;
         }
 
@@ -130,15 +126,13 @@ bool LoadTxt::processText(const QString& filepath)
     QFile ctt(m_bookDir + "0.txt");
     if (!ctt.open(QIODevice::WriteOnly))
     {
-        deleteAll();
-        emit loadFailed();
+        deleteBook();
         return false;
     }
     QTextStream out(&ctt);
     for (auto &item: m_content)
         out << item << '\n';
 
-    emit loadComplete();
     return true;
 }
 
@@ -149,7 +143,6 @@ bool LoadTxt::writeChapter(const QStringList &context, const QString &title)
     if (!lastChapter.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite))
     {
         qWarning() << "On LoadTxt writeChapter: Error happened. Load stopped.";
-        emit loadFailed();
         return false;
     }
     // write
@@ -163,7 +156,7 @@ bool LoadTxt::writeChapter(const QStringList &context, const QString &title)
     return true;
 }
 
-void LoadTxt::deleteAll()
+void LoadTxt::deleteBook()
 {
     QDir dir(m_bookDir);
     QStringList files = dir.entryList();
@@ -174,4 +167,12 @@ void LoadTxt::deleteAll()
     }
     dir.cdUp();
     dir.rmdir(m_bookDir);
+}
+
+void LoadTxt::deleteBook(int id)
+{
+    QString tmp = m_bookDir;
+    m_bookDir = tr("books/%1/").arg(id); // ./books/20 dir
+    deleteBook();
+    m_bookDir = tmp;
 }
