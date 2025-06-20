@@ -10,7 +10,7 @@ Rectangle {
     color: bg    // bg
     property color bg: "#FAFAFA"
 
-    signal openBook(id: int)
+    signal openBook(bookId: int)
     signal search
 
     //search
@@ -204,29 +204,43 @@ Rectangle {
         anchors.bottom: parent.bottom
         clip: true
 
-        cellHeight: 90;    cellWidth: 120
+        cellHeight: itemHeight;    cellWidth: itemWidth
         model: bookModel
-        delegate: Column {
+        delegate: Rectangle {
             id: settype
+            height: shelf.itemHeight; width: shelf.itemWidth
+            color: bg
+
             required property int bookId
             required property string bkname
-            Image {
+            Rectangle {
                 id: cover
-                source: "img/0.jpg"
-                height: 140     // 3:4
-
+                anchors.top: parent.top
+                anchors.right: parent.right;    anchors.left: parent.left
+                height: parent.width / 3 * 4     // 3:4
                 property string bkImg
-                bkImg: "books/" + bookId + "/0.jpg"
+                bkImg: appPath + "/books/" + bookId + "/0.jpg"
+                Icon {
+                    anchors.fill: parent
+                    src: Qt.url("file:///" + cover.bkImg)
+                    bounce: 1.01
+                }
             }
+
             Rectangle {
                 height: 6
+                anchors.top: cover.bottom
+                anchors.right: parent.right;    anchors.left: parent.left
                 gradient: Gradient {
                     GradientStop {position: 0; color: "#1E1E1E"}
                     GradientStop {position: 1; color: "#E0E0E0"}
                 }
                 opacity: 0.2
             }
+
             Text {
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right;    anchors.left: parent.left
                 text: bkname
                 font.pixelSize: 16
                 color: "#636363"
@@ -235,8 +249,8 @@ Rectangle {
                 onTapped: bookshelf.openBook(bookId)
             }
         }
-        property real itemWidth: (parent.width - 40) / 3
-        property real itemHeight: itemWidth / 3 * 4
+        property real itemWidth: (shelf.width - 40) / 3
+        property real itemHeight: itemWidth / 3 * 4 + 26
     }
     ListModel {
         id: bookModel
