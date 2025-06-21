@@ -136,7 +136,7 @@ bool BookListManager::save() {
 bool BookListManager::addBook(const QString &name) {
     // 创建新书籍对象
     QJsonObject newBook;
-    newBook["id"] = m_sum + 1;
+    newBook["bookId"] = m_sum + 1;
     newBook["name"] = name;
     newBook["exist"] = true;
     newBook["progress"] = 0;
@@ -214,7 +214,8 @@ QList<QVariant> BookListManager::getReadOrder()
         ret.append(val.toInt());                        // book id
         ret.append(m_bookIdName.value(val.toInt()));    // book name
         qDebug() << "On BookListManager::getReadOrder : " << val.toInt()
-                 << "size: "  << m_readOrder.size();
+                 << "name: "  << m_bookIdName.value(val.toInt())
+                 << "size: "  << m_bookIdName.size();
     }
     return ret;
 }

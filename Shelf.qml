@@ -11,11 +11,24 @@ Rectangle {
     color: bg    // bg
     property color bg: "#FAFAFA"
 
+    states: [
+        State {
+            name: "history"
+        },
+        State {
+            name: "joinTime"
+        },
+        State {
+            name: "progress"
+        }
+    ]
+
     signal openBook(bookId: int)
     signal search
     signal importBooks
     signal selectBooks
     signal bookOrderChanged(type: int)
+    signal updateShelf  // after books' add or delete operation finished
 
     //search
     Rectangle {
@@ -269,21 +282,27 @@ Rectangle {
                 onTapped: bookshelf.openBook(bookId)
             }
         }
-        property real itemWidth: (shelf.width - 30) / 3
+        property real itemWidth: (shelf.width - 10) / 3
         property real itemHeight: itemWidth / 3 * 4 + 26
     }
     ListModel {
         id: bookModel
     }
 
-    // test
+    // init
     signal initShelf()
     Component.onCompleted: initShelf()
     onInitShelf: {
         // bookModel.append({"bookId":1, "bkname":"笔记簿"})
+        bookModel.clear()
         bookHome.load()
         var data = bookHome.getReadOrder()
         addBookToShelf(data)
+    }
+
+    onUpdateShelf: {
+        if (state === "history")
+            initShelf();
     }
 
     function addBookToShelf(data: var) {
@@ -293,7 +312,7 @@ Rectangle {
             bookId = Number(data[i])
             i += 1;
             bkname = String(data[i])
-            console.log("字符串:", bkname, "id:", bookId)
+            // console.log("字符串:", bkname, "id:", bookId)
             bookModel.append({"bookId" : bookId, "bkname" : bkname })
         }
     }

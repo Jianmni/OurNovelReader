@@ -28,13 +28,13 @@ ApplicationWindow {
     // ...
 
 
-    // book manager
+    /************************************ book manager ************************************/
     // manage bool' import, load and delete
     BookManager {
         id: fileReader
 
         onAddFinished: {
-            console.log("Finished")
+            shelfBody.update()
         }
     }
 
@@ -49,95 +49,100 @@ ApplicationWindow {
         }
     }
 
-    StackView {
-        id: screenView
+
+    /************************************* Pages ****************************************/
+    property color bg: "#FAFAFA"
+    property int currentPage: 2
+    // shelf pages
+    Rectangle {
+        id: shelf
         anchors.fill: parent
-        initialItem: shelf
+        color: bg
+        opacity: (currentPage === 2)
+        Behavior on opacity { NumberAnimation { duration: 100 } }
+        Shelf {
+            id: shelfBody
+            anchors.bottom: shelfNavi.top
 
-        pushEnter: Transition {
-            PropertyAnimation {
-                property: "x"
-                from: screenView.width  // 从右侧进入
-                to: 0
-                duration: 250
-            }
+            // signals
+            onImportBooks: fileDialog.open()
         }
-
-        pushExit: Transition {
-            PropertyAnimation {
-                property: "x"
-                from: 0
-                to: -screenView.width  // 向左退出
-                duration: 250
-            }
-        }
-
-        popEnter: Transition {
-            PropertyAnimation {
-                property: "x"
-                from: -screenView.width  // 从左侧进入
-                to: 0
-                duration: 250
-            }
-        }
-
-        popExit: Transition {
-            PropertyAnimation {
-                property: "x"
-                from: 0
-                to: screenView.width  // 向右退出
-                duration: 250
+        Navigator {
+            id: shelfNavi
+            page: 2
+            onNavigate: (target) => {
+                switch (target) {
+                    case 1: currentPage = 1;break;
+                    case 2: break;
+                    case 3: currentPage = 3;break;
+                }
             }
         }
     }
 
-
-    /************************************* Pages ****************************************/
-    // shelf pages
-    Component {
-        id: shelf
-        Page {
-            id: page
-            Shelf {
-                id: body
-                anchors.bottom: shelfNavi.top
-
-                // signals
-                onImportBooks: fileDialog.open()
-            }
-            Navigator {
-                id: shelfNavi
-                page: 2
-                onNavigate: (target) => {
-                    switch (target) {
-                        case 1: break;
-                        case 2: break;
-                        case 3: screenView.push(info);break;
-                    }
-                }
-            }
-        }
+    Rectangle {
+        id: read
+        anchors.fill: parent
+        color: bg
+        opacity: (currentPage === 21)
+        Behavior on opacity { NumberAnimation { duration: 100 } }
+    }
+    Rectangle {
+        id: search
+        anchors.fill: parent
+        color: bg
+        opacity: (currentPage === 22)
+        Behavior on opacity { NumberAnimation { duration: 100 } }
     }
 
     // info pages
-    Component {
+    Rectangle {
         id: info
-        Page {
-            Info {
-                id: body
-                anchors.bottom: infoNavi.bottom
+        anchors.fill: parent
+        color: bg
+        opacity: (currentPage === 3)
+        Behavior on opacity { NumberAnimation { duration: 100 } }
+        Info {
+            id: infoBody
+            anchors.bottom: infoNavi.bottom
+        }
+        Navigator {
+            id: infoNavi
+            page: 3
+            onNavigate: (target) => {
+                switch (target) {
+                    case 1: currentPage = 1;break;
+                    case 2: currentPage = 2;break;
+                    case 3: break;
+              }
             }
-            Navigator {
-                id: infoNavi
-                page: 3
-                onNavigate: (target) => {
-                    switch (target) {
-                        case 1: break;
-                        case 2: screenView.push(shelf);break;
-                        case 3: break;
-                  }
-                }
-            }
+        }
+    }
+    Rectangle {
+        id: edit
+        anchors.fill: parent
+        color: bg
+        opacity: (currentPage === 31)
+        Behavior on opacity { NumberAnimation { duration: 100 } }
+    }
+
+    // listen pages
+    Rectangle {
+        id: listen
+        anchors.fill: parent
+        color: bg
+        opacity: (currentPage === 1)
+        Behavior on opacity { NumberAnimation { duration: 100 } }
+        Navigator {
+            id: listenNavi
+            page: 1
+            onNavigate: (target) => {
+                switch (target) {
+                    case 1: break;
+                    case 2: currentPage = 2;break;
+                    case 3: currentPage = 3;break;
+              }
+           }
         }
     }
 }
