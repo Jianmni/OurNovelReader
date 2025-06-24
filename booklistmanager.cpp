@@ -21,15 +21,19 @@ BookListManager::BookListManager(QObject *parent)
 
 bool BookListManager::initBookList()
 {
-    QDir dir;
+    QDir dir(".");
     if (!dir.exists("books"))
-    {
         dir.mkdir("books");
-        dir.mkdir("books/1");
-        QFile note("books/1/0.txt");
-        note.open(QIODeviceBase::NewOnly);
-    }
+    dir.mkdir("books/1");
 
+    // 笔记簿的目录
+    QFile content("books/1/content.txt");
+    content.open(QIODeviceBase::NewOnly);
+    // 笔记簿的信息
+    QFile noteInfo("books/1/info.txt");
+    noteInfo.open(QIODeviceBase::NewOnly);
+
+    // booklist 信息
     QFile file("books/booklist.json");
     if (!file.open(QIODevice::NewOnly)) {
         qWarning() << "On init: File open failed: books/booklist.json exists";

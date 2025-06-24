@@ -49,7 +49,7 @@ void BookManager::loadTxtFile(const QString &path)
         return;
 
     // book name                                    // .../download/Love.txt
-    QString bkname = "佚名";
+    QString bkname = "未知书籍";
     int ltcolon = path.lastIndexOf('/');
     bkname = path.last(path.length() - ltcolon-1);  // Love.txt
     int ltdot = bkname.lastIndexOf(".");
@@ -60,5 +60,5 @@ void BookManager::loadTxtFile(const QString &path)
 
     // load cover img
 
-    emit addFinished(id, bkname);
+    emit addFinished();
 }

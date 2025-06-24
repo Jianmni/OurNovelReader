@@ -16,6 +16,7 @@ public:
     // void copyCover();
 
     bool processText(const QString& filepath);
+    bool processInfo(const QString& filepath);
     bool writeChapter(const QStringList& context, const QString& title);
     void deleteBook();
     void deleteBook(int id);

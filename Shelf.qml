@@ -6,7 +6,6 @@ import BookListManager
 
 Rectangle {
     id: bookshelf
-    anchors.top: parent.top
     anchors.left: parent.left;  anchors.right: parent.right
     color: bg    // bg
     property color bg: "#FAFAFA"
@@ -24,56 +23,76 @@ Rectangle {
     ]
 
     signal openBook(bookId: int)
-    signal search
     signal importBooks
     signal selectBooks
     signal bookOrderChanged(type: int)
-    signal updateShelf  // after books' add or delete operation finished
 
-    //search
-    Rectangle {
-        id: search
-        height: 40
-        anchors.top: parent.top;     anchors.topMargin: 15
+
+    // shelf
+    GridView {
+        id: shelf
+        anchors.top: choices.bottom;    anchors.topMargin: 10
         anchors.left: parent.left;   anchors.leftMargin: 20
         anchors.right: parent.right; anchors.rightMargin: 20
-        radius: 10
-        color: "#EAEAEA"
+        anchors.bottom: parent.bottom
+        clip: true
 
-        Icon {
-            id: srchIc
-            src: "img/ic_search.png"
-            height: 18; width: 14
-            x: 11; y:11
-            color: "#EAEAEA"
-        }
+        cellHeight: itemHeight;    cellWidth: itemWidth
+        model: bookModel
+        delegate: Rectangle {
+            id: settype
+            height: shelf.itemHeight; width: shelf.itemWidth
+            color: bg
 
-        Text {
-            id: srchText
-            text: qsTr("搜索")
-            anchors.left: srchIc.right; anchors.leftMargin: 5
-            anchors.verticalCenter: srchIc.verticalCenter
-            font.pointSize: 12
-        }
+            required property int bookId
+            required property string bkname
+            Icon {
+                id: cover
+                anchors.top: parent.top
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - 5*2
+                height: width / 3 * 4
+                src: "img/0.jpg"
+                bounce: 1.01
+                onClicked: {
+                    console.log(bookId)
+                    bookshelf.openBook(bookId)
+                }
+            }
 
-        Text {
-            text: qsTr(" | 书架书籍")
-            anchors.left: srchText.right
-            anchors.verticalCenter: srchText.verticalCenter
-            font.pointSize: 10
-            color: "#757575"
-        }
+            Rectangle {
+                height: 6
+                anchors.top: cover.bottom
+                anchors.right: cover.right;    anchors.left: cover.left
+                gradient: Gradient {
+                    GradientStop {position: 0; color: "#1E1E1E"}
+                    GradientStop {position: 1; color: "#E0E0E0"}
+                }
+                opacity: 0.2
+            }
 
-        TapHandler {
-            onTapped: bookshelf.search()
+            Text {
+                id: bookname
+                anchors.bottom: parent.bottom
+                anchors.right: cover.right;    anchors.left: cover.left
+                text: settype.bkname
+                font.pixelSize: 14
+                elide: Text.ElideRight
+                color: "#636363"
+            }
         }
+        property real itemWidth: (shelf.width - 30) / 3
+        property real itemHeight: itemWidth / 3 * 4 + 26
     }
 
+    ListModel {
+        id: bookModel
+    }
     // select
     Rectangle {
         id: select
-        anchors.top: search.bottom; anchors.topMargin: 14
-        anchors.right: search.right
+        anchors.top: parent.top; anchors.topMargin: 14
+        anchors.right: parent.right; anchors.rightMargin: 20
         color: bg    // bg
         height: 20; width: sltText.width + 24
 
@@ -123,7 +142,7 @@ Rectangle {
     // choice bar
     Rectangle {
         id: choices
-        anchors.left: search.left;  anchors.leftMargin: 8
+        anchors.left: parent.left;   anchors.leftMargin: 20
         anchors.top: select.bottom; anchors.topMargin: 14
         color: bg
         height: 20; width: history.width + join.width + progress.width
@@ -200,7 +219,7 @@ Rectangle {
     Rectangle {
         id: group
         anchors.top: choices.top
-        anchors.right: parent.right;    anchors.rightMargin: 28
+        anchors.right: parent.right;    anchors.rightMargin: 15
         color: bg
         height: 20
 
@@ -222,77 +241,9 @@ Rectangle {
         }
     }
 
-    // shelf
-    GridView {
-        id: shelf
-        anchors.top: choices.bottom;    anchors.topMargin: 10
-        anchors.left: search.left;      anchors.right: search.right
-        anchors.bottom: parent.bottom
-        clip: true
-
-        cellHeight: itemHeight;    cellWidth: itemWidth
-        model: bookModel
-        delegate: Rectangle {
-            id: settype
-            height: shelf.itemHeight; width: shelf.itemWidth
-            color: bg
-
-            required property int bookId
-            required property string bkname
-            Rectangle {
-                id: cover
-                anchors.top: parent.top
-                anchors.right: parent.right;    anchors.left: parent.left
-                height: parent.width / 3 * 4     // 3:4
-                /*
-                property string bkImg
-                bkImg: appPath + "/books/" + bookId + "/0.jpg"
-                Icon {
-                    anchors.fill: parent
-                    src: Qt.url("file:///" + cover.bkImg)
-                    bounce: 1.01
-                }
-                */
-                Icon {
-                    anchors.fill: parent
-                    src: "img/0.jpg"
-                    bounce: 1.01
-                }
-            }
-
-            Rectangle {
-                height: 6
-                anchors.top: cover.bottom
-                anchors.right: parent.right;    anchors.left: parent.left
-                gradient: Gradient {
-                    GradientStop {position: 0; color: "#1E1E1E"}
-                    GradientStop {position: 1; color: "#E0E0E0"}
-                }
-                opacity: 0.2
-            }
-
-            Text {
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right;    anchors.left: parent.left
-                text: settype.bkname
-                font.pixelSize: 16
-                color: "#636363"
-            }
-            TapHandler {
-                onTapped: bookshelf.openBook(bookId)
-            }
-        }
-        property real itemWidth: (shelf.width - 10) / 3
-        property real itemHeight: itemWidth / 3 * 4 + 26
-    }
-    ListModel {
-        id: bookModel
-    }
 
     // init
-    signal initShelf()
-    Component.onCompleted: initShelf()
-    onInitShelf: {
+    function initShelf() {
         // bookModel.append({"bookId":1, "bkname":"笔记簿"})
         bookModel.clear()
         bookHome.load()
@@ -300,7 +251,10 @@ Rectangle {
         addBookToShelf(data)
     }
 
-    onUpdateShelf: {
+    Component.onCompleted: initShelf()
+
+    function updateShelf() {    // after books' add or delete operation finished
+        console.log("Update bookshelf")
         if (state === "history")
             initShelf();
     }
@@ -321,3 +275,13 @@ Rectangle {
         id: bookHome
     }
 }
+
+/*
+    property string bkImg
+    bkImg: appPath + "/books/" + bookId + "/0.jpg"
+    Icon {
+        anchors.fill: parent
+        src: Qt.url("file:///" + cover.bkImg)
+        bounce: 1.01
+    }
+*/

@@ -30,6 +30,14 @@ RESOURCES img/0.png img/ic_downArrow.png img/ic_editInfo.png img/ic_evlp.png img
 QML_FILES
 RESOURCES img/head.jpg img/0.jpg
 SOURCES
+QML_FILES Search.qml
+QML_FILES Read.qml
+QML_FILES
+QML_FILES PageManager.qml
+SOURCES readengin.h readengin.cpp
+SOURCES configmanager.h configmanager.cpp
+RESOURCES
+QML_FILES convert.js
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

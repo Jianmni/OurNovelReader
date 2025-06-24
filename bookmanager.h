@@ -26,7 +26,7 @@ private:
 signals:
     void getbookReadOrder();
     void getbookJoinOrder();
-    void addFinished(int bookId, QString bkname);
+    void addFinished();
 
 private:
     LoadTxt m_loadTxt;

@@ -6,6 +6,7 @@
 // my component
 #include "bookmanager.h"
 #include "booklistmanager.h"
+#include "readengin.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<BookManager>("BookManager", 1, 0, "BookManager");
     qmlRegisterType<BookListManager>("BookListManager", 1, 0, "BookListManager");
+    qmlRegisterType<ReadEngin>("ReadEngin", 1, 0, "ReadEngin");
 
     QQmlApplicationEngine engine;
 

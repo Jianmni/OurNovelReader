@@ -1,3 +1,27 @@
+// WF 2023051604037
+/*
+tree
+|_NovelReader
+  |_BookManager(C++)
+    |_BookListManager
+    |_LoadTxt
+  |_Listen
+    |_Listen
+    |_Navigator
+  |_Shlef
+    |_BookListManager(C++)
+    |_Search
+    |_Shelf
+    |_Navigator
+  |_Read
+    |_ReadEngine(C++)
+    |_ReadPage
+    |_ReadManager
+  |_User
+    |_Info
+    |_Navigator
+    |_Edit (info)
+*/
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
@@ -29,12 +53,13 @@ ApplicationWindow {
 
 
     /************************************ book manager ************************************/
-    // manage bool' import, load and delete
+    // manage book's import, load and delete
     BookManager {
         id: fileReader
 
         onAddFinished: {
-            shelfBody.update()
+            console.log("Add Finished")
+            shelfBody.updateShelf()
         }
     }
 
@@ -60,8 +85,12 @@ ApplicationWindow {
         color: bg
         opacity: (currentPage === 2)
         Behavior on opacity { NumberAnimation { duration: 100 } }
+        Search {
+            id: searchBox
+        }
         Shelf {
             id: shelfBody
+            anchors.top: searchBox.bottom
             anchors.bottom: shelfNavi.top
 
             // signals
@@ -97,7 +126,7 @@ ApplicationWindow {
 
     // info pages
     Rectangle {
-        id: info
+        id: user
         anchors.fill: parent
         color: bg
         opacity: (currentPage === 3)
