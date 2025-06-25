@@ -19,10 +19,11 @@ Rectangle {
     property bool curPageIsTitle: (pageIndex === 0)     // update automaticly
 
     // text font info
-    property int numOfLines: height / txtFontInfo.height
+    property real txtWidth: txtFontInfo.height   // for covert.js
+    property int numOfLines: height / txtWidth
     property int numOfChars: (width - txtMargin*2) / txtFontInfo.ascent
     // title font info
-    property real titleCharWidth: titleFontInfo.ascent
+    property real titHeight: titleFontInfo.height
     property int  numofTitleCharsInLine: width / titleFontInfo.ascent
 
 
@@ -214,7 +215,7 @@ Rectangle {
         Text {
             id: cn
             text: "第1章"
-            anchors.top: parent.top;     anchors.topMargin: 150
+            anchors.top: parent.top;     anchors.topMargin: 100
             anchors.left: parent.left;   anchors.leftMargin: txtMargin
             font.pixelSize: 16
             font.family: fontType

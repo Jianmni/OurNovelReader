@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.30)
 
 project(NovelReader VERSION 0.1 LANGUAGES CXX)
 
@@ -38,12 +38,18 @@ SOURCES readengin.h readengin.cpp
 SOURCES configmanager.h configmanager.cpp
 RESOURCES
 QML_FILES convert.js
+SOURCES textmanager.h textmanager.cpp
+)
+
+source_group ("QML Files" FILES
+    # Read.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 set_target_properties(appNovelReader PROPERTIES
+    AUTORCC true
 #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appNovelReader
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
