@@ -1,10 +1,30 @@
+//zzh 2023051604038
+// TTS 但仅支持.txt 文件 所以如果导入PDF、DOC文件就只能先转换格式,但是我不想做这个
+//espeak的中文合成真的抽象,后续也许调用美化包？
 #pragma once
 
 #include <QObject>
+#include <QString>
+#include <QList>
+#include <espeak-ng/speak_lib.h>
 
-class Speech
+class Speech: public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QList<QString> textList READ textList WRITE setTextList NOTIFY textListChanged)//添加一个QStringList，便于后续对小说文本的获取以及段落暂存功能预实现
 public:
-    Speech();
+    explicit Speech(QObject *parent = nullptr);
+    ~Speech();
+
+    Q_INVOKABLE void setVoice(const QString& voice_name);//关于输出语音语言的功能
+    Q_INVOKABLE void setRate(int words_per_minute);//语速
+    Q_INVOKABLE void setVolume(int volume);//声音大小
+
+    Q_INVOKABLE void speak();//输出内容
+    QList<QString> textList() const;
+    Q_INVOKABLE void setTextList(const QList<QString>& newTextList);
+private:
+    QList<QString> m_textList;  // 存储待合成的文本列表，
+    Speech(const Speech&) = delete;
+    Speech& operator=(const Speech&) = delete;
 };
