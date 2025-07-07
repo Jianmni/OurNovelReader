@@ -4,10 +4,12 @@
 #pragma once
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class LoadTxt: public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     explicit LoadTxt(QObject *parent = nullptr);
 

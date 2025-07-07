@@ -1,11 +1,12 @@
 #pragma once
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class TextManager : public QObject
 {
     Q_OBJECT
-    // QML_ELEMENT
+    QML_ELEMENT
 public:
     explicit TextManager(QObject *parent = nullptr);
 

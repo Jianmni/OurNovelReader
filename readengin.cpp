@@ -12,6 +12,7 @@ QList<QVariant> ReadEngin::loadBookReadInfo(int bkId)   // call only once for a 
 {
     m_bookPath += tr("%1/").arg(bkId);  // ./books/1/
     QList<QVariant> ret {};
+
     QString bookInfoPath = m_bookPath + "info.txt";
     QFile info(bookInfoPath);
     if(!info.open(QIODeviceBase::ReadOnly))
@@ -30,6 +31,9 @@ QList<QVariant> ReadEngin::loadBookReadInfo(int bkId)   // call only once for a 
         if(line.isNull()) continue;
         ret.append(line);
     }
+
+    m_tmpForSave = ret;
+
     return ret;
 }
 
@@ -75,7 +79,24 @@ QList<QString> ReadEngin::loadChapter(int chapterId)
     return ret;
 }
 
-void ReadEngin::writeProgress(int curContent, int curPage)
+void ReadEngin::writeProgress(int curContent, int curPage, int hour, int minu, int seco)
 {
+    QString bookInfoPath = m_bookPath + "info.txt";
+    QFile file(bookInfoPath);
+    if(!file.open(QIODeviceBase::WriteOnly | QIODeviceBase::Text | QIODeviceBase::Truncate))
+    {
+        qWarning() << "On ReadEngin::writeProgress: Open file failed: " + bookInfoPath;
+    }
 
+    m_tmpForSave[0] = curContent;
+    m_tmpForSave[1] = curPage;
+
+    m_tmpForSave[5] = hour;
+    m_tmpForSave[6] = minu;
+    m_tmpForSave[7] = seco;
+
+    QTextStream out(&file);
+    int len = m_tmpForSave.length();
+    for (int i=0; i<len; ++i)
+        out << m_tmpForSave[i].toString() << '\n';
 }

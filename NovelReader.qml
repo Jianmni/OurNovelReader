@@ -26,7 +26,8 @@ tree
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
-import BookManager
+
+import NovelReader
 
 ApplicationWindow {
     id: novelReader
@@ -75,6 +76,13 @@ ApplicationWindow {
         case 2: manageShelfPage();  break;
         case 3: manageUserPage();   break;
       }
+    }
+    onOpenBook: target => {
+                  manageBook(target)
+                }
+
+    ConfigManager {
+        id: config
     }
 
     function manageShelfPage() {
@@ -129,5 +137,13 @@ ApplicationWindow {
         object.destroy(500)
       }
       )
+    }
+
+    function manageBook(bkID: int) {
+      var readConfig = config.getReadConfig()
+      var component = Qt.createComponent("ReadControl.qml");
+      if (component.status === Component.Ready)
+          component.createObject(novelReader, {bookId: bkID, config: readConfig});
+
     }
 }

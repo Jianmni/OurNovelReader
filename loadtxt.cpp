@@ -194,7 +194,7 @@ bool LoadTxt::processInfo(const QString &filepath)
     }
     QTextStream out(&info);
     out << "0\n0\n";                         // current read content, apge
-    out << m_content.size() << "\n0\n";      // total content num, total page num
+    out << m_content.size() << "\n";         // total content num, total page num
     out << bkname << '\n' <<author << '\n';
     out << 0 << '\n' << 0 << '\n' << 0 << '\n'; // read hour, minute, second
     out << brief << '\n';

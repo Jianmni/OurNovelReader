@@ -2,7 +2,7 @@
 // this file builds the UI of read interface
 import QtQuick
 import QtQuick.Controls
-import BookListManager
+import NovelReader
 
 Rectangle {
     id: bookshelf

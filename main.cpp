@@ -1,22 +1,12 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>  // 添加这行
 #include <QDir>
 
-// my component
-#include "bookmanager.h"
-#include "booklistmanager.h"
-#include "readengin.h"
-#include "textmanager.h"
+#include <QQmlContext>  // 添加这行
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
-    qmlRegisterType<BookManager>("BookManager", 1, 0, "BookManager");
-    qmlRegisterType<BookListManager>("BookListManager", 1, 0, "BookListManager");
-    qmlRegisterType<ReadEngin>("ReadEngin", 1, 0, "ReadEngin");
-    qmlRegisterType<TextManager>("TextManager", 1, 0, "TextManager");
 
     QQmlApplicationEngine engine;
 

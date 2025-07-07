@@ -1,7 +1,8 @@
 import QtQuick
 Rectangle {
     id: manager
-    property int txtMargin: 20
+    anchors.left: parent.left
+    anchors.right: parent.right
 
     // get from parent when init
     property var preCptTxt: []
@@ -11,6 +12,7 @@ Rectangle {
     property int chapterIndex:  1      // check show cover or not
     property int pageIndex: 0          // change before move
     // read config :
+    property int txtMargin: 20
     property bool leftAndRight: true    // false is up-and-down way
     property color readbg: "#FAFAFA"
     property int fontSize: 16           // text pixelSize
@@ -54,6 +56,40 @@ Rectangle {
     signal showEnd              // should show end
 
     /****************** page change operation****************/
+    property bool canSwitch: false
+    property real leftEdge: parent.width / 3
+    property real rightEdge: parent.width / 3 * 2
+    property real topEdge: parent.height / 5
+    property real bottomEdge: parent.height / 5 * 4
+    signal showMenu
+    TapHandler {
+        enabled: canSwitch
+        onTapped: eventPoint => {
+            var x = eventPoint.position.x
+            var y = eventPoint.position.y
+            if(leftAndRight)
+                if(x >= rightEdge)   // go to next page
+                {
+                    switchNext()
+                }
+                else if (x <= leftEdge)
+                {
+                    switchPre()
+                }
+                else showMenu()
+            else
+                if(y >= bottomEdge || x >= rightEdge)
+                {
+                    // ...
+                }
+                else if(y <= topEdge || x <= leftEdge)
+                {
+                    // ...
+                }
+                else showMenu()
+        }
+    }
+
     property bool curPageIs0: true        // true is page0, while false is page1
     property bool curPageIsTitle: (pageIndex === 0)     // update automaticly
     // scroll
@@ -212,7 +248,7 @@ Rectangle {
             anchors.top: parent.top;     anchors.bottom: parent.bottom
             anchors.left: parent.left;   anchors.leftMargin: txtMargin
             text: "满纸荒唐言"
-            font.pixelSize: 16
+            font.pixelSize: fontSize
             font.family: fontType
         }
     }
@@ -229,7 +265,7 @@ Rectangle {
             anchors.top: parent.top;     anchors.bottom: parent.bottom
             anchors.left: parent.left;   anchors.leftMargin: txtMargin
             text: "都付笑谈中"
-            font.pixelSize: 16
+            font.pixelSize: fontSize
             font.family: fontType
         }
     }
@@ -247,7 +283,7 @@ Rectangle {
             text: "第1章"
             anchors.top: parent.top;     anchors.topMargin: 100
             anchors.left: parent.left;   anchors.leftMargin: txtMargin
-            font.pixelSize: 16
+            font.pixelSize: fontSize
             font.family: fontType
         }
         Text {
@@ -255,7 +291,7 @@ Rectangle {
             text: "林黛玉别父闹天宫\n西门庆夜会猛张飞"
             anchors.top: cn.top;     anchors.topMargin: 50
             anchors.left: cn.left
-            font.pixelSize: 24
+            font.pixelSize: fontSize + 8
             font.family: fontType
         }
         Text {
@@ -264,7 +300,7 @@ Rectangle {
             anchors.top: ct.bottom;  anchors.topMargin: 50
             anchors.left: cn.left
             anchors.bottom: parent.bottom
-            font.pixelSize: 16
+            font.pixelSize: fontSize
             font.family: fontType
         }
     }

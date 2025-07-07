@@ -6,10 +6,12 @@
 #include <QJsonObject>
 #include <QList>
 #include <QVariant>
+#include <QtQml/qqmlregistration.h>
 
 class BookListManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 public:
     explicit BookListManager(QObject *parent = nullptr);
 

@@ -31,7 +31,7 @@ QList<QString> TextManager::formulaTxt(QList<QString> txt)
         ret += lines;
     }
 
-    // qDebug() << ret.length();
+    qDebug() << ret.length();
     return ret;
 }
 

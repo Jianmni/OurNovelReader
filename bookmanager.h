@@ -5,12 +5,14 @@
 #include <QObject>
 #include <QList>
 #include <QVariant>
+#include <QtQml/qqmlregistration.h>
 
 #include "loadtxt.h"
 #include "booklistmanager.h"
 
 class BookManager : public QObject {
     Q_OBJECT
+    QML_ELEMENT
 public:
     explicit BookManager(QObject *parent = nullptr);
 

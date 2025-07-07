@@ -17,21 +17,25 @@ qt_add_qml_module(appNovelReader
     VERSION 1.0
     QML_FILES
     NovelReader.qml
-SOURCES booklistmanager.cpp booklistmanager.h bookmanager.cpp bookmanager.h
-SOURCES loadtxt.cpp loadtxt.h
-SOURCES readengin.h readengin.cpp
-SOURCES configmanager.h configmanager.cpp
-SOURCES textmanager.h textmanager.cpp
 
-QML_FILES Shelf.qml
-QML_FILES Icon.qml Navigator.qml
-QML_FILES Search.qml
-QML_FILES Read.qml
-QML_FILES PageManager.qml
-QML_FILES User.qml
-QML_FILES ListenMainPage.qml
-QML_FILES ShelfMainPage.qml
-QML_FILES UserMainPage.qml
+SOURCES booklistmanager.cpp booklistmanager.h
+        bookmanager.cpp bookmanager.h
+        readengin.h readengin.cpp
+        configmanager.h configmanager.cpp
+        textmanager.h textmanager.cpp
+        loadtxt.cpp loadtxt.h
+        main.cpp
+
+QML_FILES Shelf.qml Search.qml ShelfMainPage.qml
+          Icon.qml Navigator.qml
+          ListenMainPage.qml
+          User.qml UserMainPage.qml
+
+          ReadControl.qml PageManager.qml
+          BottomMenu.qml TopMenu.qml
+          BrightBoard.qml
+          ContentBoard.qml CoverPage.qml FontBoard.qml
+          NoteBoard.qml ProgressBoard.qml
 
 RESOURCES
     img/0.png img/ic_downArrow.png img/ic_editInfo.png img/ic_evlp.png img/ic_import.png
@@ -39,6 +43,8 @@ RESOURCES
     img/onlitsen.png img/onread.png img/onuser.png img/read.png img/user.png
     img/head.jpg img/0.jpg
     img/ic_drtNameLeft.png img/ic_drtNameRight.png img/ic_tip.png
+
+RESOURCES BrightnessControl.java
 )
 
 source_group ("QML Files" FILES
