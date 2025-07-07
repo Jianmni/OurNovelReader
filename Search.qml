@@ -8,7 +8,8 @@ Rectangle {
     anchors.right: parent.right; anchors.rightMargin: 20
     radius: 10
     color: "#EAEAEA"
-    signal search
+
+    signal turnToPage(target: int)
 
     Icon {
         id: srchIc
@@ -36,6 +37,6 @@ Rectangle {
     }
 
     TapHandler {
-        onTapped: search()
+        onTapped: turnToPage(22)
     }
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include <QObject>
+#include <QVariant>
 
 class ReadEngin : public QObject
 {
@@ -11,7 +12,7 @@ public:
     explicit ReadEngin(QObject *parent = nullptr);
     // load
     Q_INVOKABLE QList<QVariant> loadBookReadInfo(int bkId);
-    Q_INVOKABLE QList<QString> loadBookContent(int bkId);
+    Q_INVOKABLE QList<QString> loadBookContent();
     Q_INVOKABLE QList<QString> loadChapter(int chapterId);
 
     // save

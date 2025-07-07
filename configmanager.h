@@ -2,7 +2,7 @@
 
 #include <QObject>
 
-class ConfigManager
+class ConfigManager: public QObject
 {
     Q_OBJECT
 public:

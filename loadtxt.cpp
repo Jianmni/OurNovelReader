@@ -196,6 +196,7 @@ bool LoadTxt::processInfo(const QString &filepath)
     out << "0\n0\n";                         // current read content, apge
     out << m_content.size() << "\n0\n";      // total content num, total page num
     out << bkname << '\n' <<author << '\n';
+    out << 0 << '\n' << 0 << '\n' << 0 << '\n'; // read hour, minute, second
     out << brief << '\n';
     return true;
 }
@@ -216,9 +217,9 @@ bool LoadTxt::writeChapter(const QStringList &context, const QString &title)
     // write
     QTextStream out(&lastChapter);
     // seperate title num and name
-    int pos = title.indexOf(' ');   // 第一章 芜芜芜
+    int pos = title.indexOf(' ');   // 第一章 芜芜芜, 3
     QString num = title.first(pos);                     // 第一章
-    QString name = title.last(title.length() - pos -1); // 芜芜芜
+    QString name = title.last(title.length() - pos -2); // 芜芜芜, 7 - 3 - 1 = 3
     out << num << '\n' << name <<'\n';
     for (const auto &line : context)
         out << line << '\n';

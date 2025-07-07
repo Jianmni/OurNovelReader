@@ -33,7 +33,7 @@ QList<QVariant> ReadEngin::loadBookReadInfo(int bkId)   // call only once for a 
     return ret;
 }
 
-QList<QString> ReadEngin::loadBookContent(int bkId)
+QList<QString> ReadEngin::loadBookContent()
 {
     QList<QString> ret {};
     QString bookContentPath = m_bookPath + "content.txt";

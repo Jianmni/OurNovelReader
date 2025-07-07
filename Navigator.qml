@@ -22,7 +22,6 @@ Rectangle {
 
         onClicked: {
             navigate(1)
-            // console.log("listen")
         }
     }
 
@@ -37,7 +36,6 @@ Rectangle {
 
         onClicked: {
             navigate(2)
-            // console.log("read")
         }
     }
 
@@ -53,7 +51,6 @@ Rectangle {
 
         onClicked: {
             navigate(3)
-            // console.log("user")
         }
     }
 }

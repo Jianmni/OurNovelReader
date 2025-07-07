@@ -22,11 +22,10 @@ Rectangle {
         }
     ]
 
-    signal openBook(bookId: int)
+    signal openBook(bkId: int)
     signal importBooks
     signal selectBooks
     signal bookOrderChanged(type: int)
-
 
     // shelf
     GridView {
@@ -49,13 +48,11 @@ Rectangle {
             Icon {
                 id: cover
                 anchors.top: parent.top
-                anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - 5*2
                 height: width / 3 * 4
                 src: "img/0.jpg"
                 bounce: 1.01
                 onClicked: {
-                    console.log(bookId)
                     bookshelf.openBook(bookId)
                 }
             }
@@ -81,8 +78,8 @@ Rectangle {
                 color: "#636363"
             }
         }
-        property real itemWidth: (shelf.width - 30) / 3
-        property real itemHeight: itemWidth / 3 * 4 + 26
+        property int itemWidth: shelf.width / 3
+        property int itemHeight: itemWidth / 3 * 4 + 20
     }
 
     ListModel {

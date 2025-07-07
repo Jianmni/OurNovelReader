@@ -1,26 +1,46 @@
 import QtQuick
 Rectangle {
     id: manager
-    anchors.fill: parent
     property int txtMargin: 20
 
     // get from parent when init
-    property var preChapter: []
-    property var curChapter: []
-    property var nxtChapter: []
-    property int  pageIndex: 0          // change before move
+    property var preCptTxt: []
+    property var curCptTxt: []
+    property var nxtCptTxt: []
+    property int cptSum: 1             // check show end or not
+    property int chapterIndex:  1      // check show cover or not
+    property int pageIndex: 0          // change before move
     // read config :
     property bool leftAndRight: true    // false is up-and-down way
     property color readbg: "#FAFAFA"
     property int fontSize: 16           // text pixelSize
     property string fontType: "Helvetica"
 
-    property bool curPageIs0: true        // true is page0, while false is page1
-    property bool curPageIsTitle: (pageIndex === 0)     // update automaticly
+    // 处理后，得到以下内容
+    // 只保存前一章、当前章和后一章三章内容
+    // 每章的章节号
+    property string curNum: ""
+    property string nxtNum: ""
+    property string preNum: ""      // for exchange
+    // 每章的标题
+    property string curTitle: ""
+    property string nxtTitle: ""
+    property string preTitle: ""    // for exchange
+    // 每章的第一页内容
+    property string curFirstPage: ""
+    property string nxtFirstPage: ""
+    property string preFirstPage: ""
+    // pages 保存的内容实际是从每章第二页开始
+    property var curPages: ["",]       // QList<QString>, first page is empty, show title page
+    property var prePages: ["",]
+    property var nxtPages: ["",]
+    // for parent to use
+    property int prePageSum: 0
+    property int curPageSum: 0
+    property int nxtPageSum: 0
 
     // text font info
-    property real txtWidth: txtFontInfo.height   // for covert.js
-    property int numOfLines: height / txtWidth
+    property int numOfLines: height / txtFontInfo.height
     property int numOfChars: (width - txtMargin*2) / txtFontInfo.ascent
     // title font info
     property real titHeight: titleFontInfo.height
@@ -30,141 +50,151 @@ Rectangle {
     /* signals */
     signal loadNextChapter      // turn to next page
     signal loadPreChapter       // turn to previous page
-
-
+    signal showCover            // should show cover
+    signal showEnd              // should show end
 
     /****************** page change operation****************/
+    property bool curPageIs0: true        // true is page0, while false is page1
+    property bool curPageIsTitle: (pageIndex === 0)     // update automaticly
     // scroll
     // ...
     // switch
-
-    TapHandler {
-        onTapped: eventPoint => {
-            // console.log(eventPoint.position)
-            var x = eventPoint.position.x
-            if( x > (parent.width/2)){    // show next page
-                pageIndex++
-                switchNext()
-            } else {        // show previous page
-                pageIndex--
-                switchPre()
-            }
-            curPageIs0 = !curPageIs0
-        }
-    }
-
     function switchNext() { // move left
-        if(curPageIs0) {        // curPage is page0, move page1 to right and move
-            if (page1.x !== width)
-            {
-                page1.xPos = width
+        pageIndex++         // to next page's index
+        if (pageIndex === curPageSum && (chapterIndex+1) === cptSum) // showEnd() or on end
+        {
+            pageIndex--;    // at last page
+            console.log("end")
+            showEnd()
+            return
+        }
 
-                if (pageIndex < curChapter.length)
+        if(page0.x === 0) {        // curPage is page0, move page1 to right and move
+            if (page1.x !== pageWidth)
+            {
+                if(pageIndex === curPageSum)    /**** next chapter ****/
                 {
-                    txt1.text = curChapter[pageIndex]       // change text
-                    if (pageIndex === 1)     /* current page is title page in truth */
-                    {
-                        // titlePage and page1 run together
-                        t1MoveLeft.start()
-                        return
-                    }
-                }
-                else {          // next page
                     pageIndex = 0
-                    txt3.text = nxtChapter[pageIndex]
-                    // change chapter array
-                    // ...
-                    titlePage.xPos = width
-                    // page0 and titlePage run together
+                    cn.text = nxtNum
+                    ct.text = nxtTitle
+                    txt3.text = nxtFirstPage
+
+                    titlePage.x = pageWidth
+                    titlePage.xPos = pageWidth
+                    // titlePage and current page page0 run together
+                    console.log("1")
                     t0MoveLeft.start()
+
+                    chapterIndex++
+                    loadNextChapter()
                     return
                 }
+
+                page1.x = pageWidth
+                page1.xPos = pageWidth
+                txt1.text = curPages[pageIndex]       // change text
             }
         }
-        else {                  // curPage is page1, move page0 to right and move
-            if (page0.x !== width)
+        else if (page1.x === 0){    // curPage is page1, move page0 to right and move
+            if (page0.x !== pageWidth)
             {
-                page0.xPos = width
-                if (pageIndex < curChapter.length)
+                if(pageIndex === curPageSum)    /**** next chapter ****/
                 {
-                    txt0.text = curChapter[pageIndex]
-                    if (pageIndex === 1)     /* current page is title page in truth */
-                    {
-                        // titlePage and page0 run together
-                        // run animation
-                        return
-                    }
-                }
-                else
-                {
-                    pageIndex = 0;
-                    txt3.text = nxtChapter[pageIndex]
-                    // change chapter
-                    // ...
-                    titlePage.xPos = width
-                    // page0 and titlePage run together
-                    // ...
+                    pageIndex = 0
+                    cn.text = nxtNum
+                    ct.text = nxtTitle
+                    txt3.text = nxtFirstPage
+
+                    titlePage.x = pageWidth
+                    titlePage.xPos = pageWidth
+                    // titlePage and current page page0 run together
+                    t1MoveLeft.start()
+
+                    chapterIndex++
+                    loadNextChapter()
                     return
                 }
+
+                page0.x = pageWidth
+                page0.xPos = pageWidth
+                txt0.text = curPages[pageIndex]
             }
+        }
+        else if(titlePage.x === 0)
+        {      // current page is the title page
+            page1.x = pageWidth
+            page1.xPos = pageWidth
+            txt1.text = curPages[pageIndex]       // change text
+
+            t1MoveLeft.start()
+            return
         }
         moveLeft.start()
     }
     function switchPre() {
-        if (curPageIs0)         // curPage = page0, move page1 to left and move
+        pageIndex--         // to next page's index
+        if (pageIndex < 0 && (chapterIndex-1) === 0)   // showCover() or on cover
         {
-            if (page1.x !== -width)
-            {
-                page1.xPos = -width
-                if (pageIndex === 0)    // next page is the title page
-                {
-                    txt3.text = curChapter[0]
-                    titlePage.xPos = -width
-                    // page0 and title page move together
-                    t0MoveRight.start()
-                }
-                else if (pageIndex > 0)
-                {
-                    txt1.text = curChapter[pageIndex]
-                }
-                else
-                {
-                    pageIndex = preChapter.length - 1;  // next page and current page is the title page
-                    txt1.text = preChapter[pageIndex]
-                    // change chapter array
-                    // page1 and titlePage move together
-                    t1MoveRight.start()
-                    return
-                }
-            }
+            pageIndex++
+            console.log("cover")
+            showCover()
+            return
         }
-        else {                  // curPage = page1, move page0 to left and move
-            if (page0.x !== -width)
+
+        if (page0.x === 0)          // curPage = page0, move page1 to left and move
+        {
+            if (pageIndex === 0)    // previous is the title page
             {
-                page0.xPos = -width
-                if (pageIndex === 0)        // next is the title page
-                {
-                    txt3.text = curChapter[0]
-                    titlePage.xPos = -width
-                    // page1 and the title page move together
-                    // run animation
-                }
-                else if (pageIndex > 0)
-                {
-                    txt0.text = curChapter[pageIndex]
-                }
-                else
-                {
-                    pageIndex = preChapter.length - 1;  // current is the title page
-                    txt0.text = preChapter[pageIndex]
-                    // page0 and the title page move together
-                    // run animation
-                    return
-                }
+                cn.text = curNum
+                ct.text = curTitle
+                txt3.text = curFirstPage
+
+                titlePage.x = -pageWidth
+                titlePage.xPos = -pageWidth
+                // page0 and title page move together
+                t0MoveRight.start()
+                return
             }
+
+            page1.x = -pageWidth
+            page1.xPos = -pageWidth
+            txt1.text = curPages[pageIndex]
+            // previous chapter impossible
+        }
+        else if(page1.x === 0)
+        {                           // curPage = page1, move page0 to left and move
+            if (pageIndex === 0)    // next is the title page
+            {
+                cn.text = curNum
+                ct.text = curTitle
+                txt3.text = curFirstPage
+
+                titlePage.x = -pageWidth
+                titlePage.xPos = -pageWidth
+                // page1 and title page move together
+                t1MoveRight.start()
+                return
+            }
+            page0.x = -pageWidth
+            page0.xPos = -pageWidth
+            txt0.text = curPages[pageIndex]
+            // previous chapter impossible
+        }
+        else if(titlePage.x === 0)
+        {
+            pageIndex = prePageSum - 1
+            txt1.text = prePages[pageIndex]
+            page1.x = -pageWidth
+            page1.xPos = -pageWidth
+            t1MoveRight.start()
+
+            --chapterIndex
+            loadPreChapter()
+            return
         }
         moveRight.start()
     }
+
 
     // scroll next / pre
 
@@ -173,9 +203,9 @@ Rectangle {
         id: page0
         height: parent.height;  width: parent.width
         y:0
-        x:xPos // switch
+        x:-pageWidth*2 // switch
         color: readbg
-        property real xPos: 0
+        property real xPos: x
 
         Text {
             id: txt0
@@ -190,9 +220,9 @@ Rectangle {
         id: page1
         height: parent.height;  width: parent.width
         y:0
-        x:xPos // switch
+        x:-pageWidth*2 // switch
         color: readbg
-        property real xPos: parent.width
+        property real xPos: x
 
         Text {
             id: txt1
@@ -208,9 +238,9 @@ Rectangle {
         id: titlePage
         height: parent.height;  width: parent.width
         y: 0
-        x: -xPos
+        x: -pageWidth*2
         color: readbg
-        property real xPos: parent.width
+        property real xPos: x
 
         Text {
             id: cn
@@ -231,7 +261,7 @@ Rectangle {
         Text {
             id: txt3
             text: "欲知后事如何，且看下回分解。"
-            anchors.top: ct.bottom;  anchors.topMargin: 20
+            anchors.top: ct.bottom;  anchors.topMargin: 50
             anchors.left: cn.left
             anchors.bottom: parent.bottom
             font.pixelSize: 16
@@ -246,6 +276,248 @@ Rectangle {
     FontMetrics {
         id: titleFontInfo
         font: ct.font
+    }
+
+    /************************* init *************************/
+    function setPage()      // after initPages()
+    {
+        if (pageIndex === 0)    // curPageIsTitle = true
+        {
+            cn.text = curNum
+            ct.text = curTitle
+            txt3.text = curFirstPage
+            titlePage.x = 0     // show title page
+        }
+        else
+        {
+            txt0.text = curPages[pageIndex]
+            page0.x = 0
+        }
+    }
+
+    function initPages() {
+        initCurPages()
+        initPrePages()
+        setPage()
+        initNxtPages()
+    }
+
+    function initCurPages()
+    {
+        var i=0
+        // chapter number
+        curNum = curCptTxt[i++]
+
+        let tmp = ""
+        // chapter title
+        let lineCount = 0
+        var len = curCptTxt.length
+        while(i<len && curCptTxt[i] !== "#")
+        {
+            tmp = tmp + curCptTxt[i] + '\n'
+            ++i
+            ++lineCount
+        }
+        curTitle = tmp
+        ++i     // skip '#
+
+        tmp = ""
+        // text in first page
+        var firstLine = numOfLines - lineCount*2 - 10
+        if (firstLine < 0) firstLine = 0
+        while(i<len && firstLine)
+        {
+            tmp = tmp + curCptTxt[i] + '\n'
+            ++i
+            --firstLine
+        }
+        curFirstPage = tmp
+
+        curPageSum++
+        tmp = ""
+        // pages
+        lineCount = 0
+        while(i<len)
+        {
+            tmp = tmp + curCptTxt[i] + '\n'
+            ++lineCount
+            if (lineCount === numOfLines)
+            {
+                curPages.push(tmp)
+                curPageSum++
+                tmp = ""
+                lineCount = 0
+            }
+            ++i
+        }
+        if (lineCount !== 0)
+        {
+            curPages.push(tmp)
+            curPageSum++
+        }
+        console.log("cur OK", curNum)
+    }
+    function initPrePages()
+    {
+        /* prepare */
+        prePageSum = 0
+        prePages = ["",]
+
+        if (preCptTxt[0] === undefined)
+        {
+            console.log("pre no content")
+            return
+        }
+        var i=0
+        // chapter number
+        preNum = preCptTxt[i++]
+
+        let tmp = ""
+        // chapter title
+        let lineCount = 0
+        var len = preCptTxt.length
+        while(i<len && preCptTxt[i] !== "#")
+        {
+            tmp = tmp + preCptTxt[i] + '\n'
+            ++i
+            ++lineCount
+        }
+        preTitle = tmp
+        ++i     // skip '#
+
+        tmp = ""
+        // text in first page
+        var firstLine = numOfLines - lineCount*2 - 10
+        if (firstLine < 0) firstLine = 0
+        while(i<len && firstLine)
+        {
+            tmp = tmp + preCptTxt[i] + '\n'
+            ++i
+            --firstLine
+        }
+        preFirstPage = tmp
+
+        prePageSum++
+        tmp = ""
+        // pages
+        lineCount = 0
+        while(i<len)
+        {
+            tmp = tmp + preCptTxt[i] + '\n'
+            ++lineCount
+            if (lineCount === numOfLines)
+            {
+                prePages.push(tmp)
+                prePageSum++
+                tmp = ""
+                lineCount = 0
+            }
+            ++i
+        }
+        if (lineCount !== 0)
+        {
+            prePages.push(tmp)
+            prePageSum++
+        }
+        console.log("pre OK", preNum)
+    }
+    function initNxtPages()
+    {
+        /* prepare */
+        nxtPageSum = 0
+        nxtPages = ["",]
+
+        if (nxtCptTxt[0] === undefined)
+        {
+            console.log("nxt no content")
+            return
+        }
+        var i=0
+        // chapter number
+        nxtNum = nxtCptTxt[i++]
+
+        let tmp = ""
+        // chapter title
+        let lineCount = 0
+        var len = nxtCptTxt.length
+        while(i<len && nxtCptTxt[i] !== "#")
+        {
+            tmp = tmp + nxtCptTxt[i] + '\n'
+            ++i
+            ++lineCount
+        }
+        nxtTitle = tmp
+        ++i     // skip '#
+
+        tmp = ""
+        // text in first page
+        var firstLine = numOfLines - lineCount*2 - 10
+        if (firstLine < 0) firstLine = 0
+        while(i<len && firstLine)
+        {
+            tmp = tmp + nxtCptTxt[i] + '\n'
+            ++i
+            --firstLine
+        }
+        nxtFirstPage = tmp
+
+        nxtPageSum++
+        tmp = ""
+        // pages
+        lineCount = 0
+        while(i<len)
+        {
+            tmp = tmp + nxtCptTxt[i] + '\n'
+            ++lineCount
+            if (lineCount === numOfLines)
+            {
+                nxtPages.push(tmp)
+                nxtPageSum++
+                tmp = ""
+                lineCount = 0
+            }
+            ++i
+        }
+        if (lineCount !== 0)
+        {
+            nxtPages.push(tmp)
+            nxtPageSum++
+        }
+        console.log("nxt OK", nxtNum, nxtPageSum)
+    }
+
+    function switchChapter2Nxt()
+    {
+        prePages = curPages
+        curPages = nxtPages
+
+        preNum = curNum
+        preTitle = curTitle
+        preFirstPage = curFirstPage
+        prePageSum = curPageSum
+
+        curNum = nxtNum
+        curTitle = nxtTitle
+        curFirstPage = nxtFirstPage
+        curPageSum = nxtPageSum
+        console.log("switchChapter2Nxt OK")
+    }
+
+    function switchChapter2Pre()
+    {
+        nxtPages = curPages
+        curPages = prePages
+
+        nxtNum = curNum
+        nxtTitle = curTitle
+        nxtFirstPage = curFirstPage
+        nxtPageSum = curPageSum
+
+        curNum = preNum
+        curTitle = preTitle
+        curFirstPage = preFirstPage
+        curPageSum = prePageSum
+        console.log("switchChapter2Pre OK")
     }
 
     /********************** animations **********************/
@@ -369,11 +641,4 @@ Rectangle {
         }
     }
 
-    /************************* init *************************/
-    Component.onCompleted: {
-        init()
-    }
-    function init() {
-        txt0.text = curChapter[pageIndex]
-    }
 }

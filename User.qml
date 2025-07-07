@@ -7,6 +7,7 @@ Rectangle {
     color: bg    // bg
     property color bg: "#FAFAFA"
 
+    // 邮箱
     Rectangle {
         id: envelope
         anchors.top: parent.top;    anchors.topMargin: 20   // y:20
@@ -20,7 +21,7 @@ Rectangle {
         }
     }
 
-
+    // 设置
     Rectangle {
         id: sets
         anchors.top: envelope.top
@@ -34,7 +35,7 @@ Rectangle {
         }
     }
 
-
+    // 用户信息： 头像、用户名、签名
     Rectangle {
         id: user
         height: 80

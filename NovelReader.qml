@@ -15,6 +15,7 @@ tree
     |_Navigator
   |_Read
     |_ReadEngine(C++)
+    |_textManager(C++)
     |_ReadPage
     |_ReadManager
   |_User
@@ -34,23 +35,6 @@ ApplicationWindow {
     visible: true
     title: qsTr("小说阅读")
 
-    // 闲逛: shelf, radio, info
-    signal ramble(target: int)
-    // radio
-    signal playChanged
-    signal changeBook
-    signal bookChanged(id: int)
-    signal playVolumeChanged(idensity: int)
-    signal playVelocityChanged(idensity: int)
-    signal playOrderChanged(type: int)
-    // ...
-
-    // shelf
-    // ...
-
-    // info
-    // ...
-
 
     /************************************ book manager ************************************/
     // manage book's import, load and delete
@@ -59,7 +43,6 @@ ApplicationWindow {
 
         onAddFinished: {
             console.log("Add Finished")
-            shelfBody.updateShelf()
         }
     }
 
@@ -76,102 +59,75 @@ ApplicationWindow {
 
 
     /************************************* Pages ****************************************/
+    // load dynamically
     property color bg: "#FAFAFA"
     property int currentPage: 2
-    // shelf pages
-    Rectangle {
-        id: shelf
-        anchors.fill: parent
-        color: bg
-        opacity: (currentPage === 2)
-        Behavior on opacity { NumberAnimation { duration: 100 } }
-        Search {
-            id: searchBox
-        }
-        Shelf {
-            id: shelfBody
-            anchors.top: searchBox.bottom
-            anchors.bottom: shelfNavi.top
 
-            // signals
-            onImportBooks: fileDialog.open()
-        }
-        Navigator {
-            id: shelfNavi
-            page: 2
-            onNavigate: (target) => {
-                switch (target) {
-                    case 1: currentPage = 1;break;
-                    case 2: break;
-                    case 3: currentPage = 3;break;
-                }
-            }
-        }
+    signal changePage(target: int)
+    signal openBook(target: int)
+    Component.onCompleted: {
+      manageShelfPage()
     }
 
-    Rectangle {
-        id: read
-        anchors.fill: parent
-        color: bg
-        opacity: (currentPage === 21)
-        Behavior on opacity { NumberAnimation { duration: 100 } }
-    }
-    Rectangle {
-        id: search
-        anchors.fill: parent
-        color: bg
-        opacity: (currentPage === 22)
-        Behavior on opacity { NumberAnimation { duration: 100 } }
+    onChangePage: target => {
+      switch (target) {
+        case 1: manageListenPage(); break;
+        case 2: manageShelfPage();  break;
+        case 3: manageUserPage();   break;
+      }
     }
 
-    // info pages
-    Rectangle {
-        id: user
-        anchors.fill: parent
-        color: bg
-        opacity: (currentPage === 3)
-        Behavior on opacity { NumberAnimation { duration: 100 } }
-        Info {
-            id: infoBody
-            anchors.bottom: infoNavi.bottom
-        }
-        Navigator {
-            id: infoNavi
-            page: 3
-            onNavigate: (target) => {
-                switch (target) {
-                    case 1: currentPage = 1;break;
-                    case 2: currentPage = 2;break;
-                    case 3: break;
-              }
-            }
-        }
-    }
-    Rectangle {
-        id: edit
-        anchors.fill: parent
-        color: bg
-        opacity: (currentPage === 31)
-        Behavior on opacity { NumberAnimation { duration: 100 } }
+    function manageShelfPage() {
+      var component = Qt.createComponent("ShelfMainPage.qml")
+      var object
+      if (component.status === Component.Ready)
+        object = component.createObject(novelReader)
+
+      object.turnToPage.connect(function(target) {
+        console.log("Here", target)
+        changePage(target)
+        object.destroy(500)
+      }
+      )
+      object.openBook.connect(function(target) {
+        console.log("Open book", target)
+        openBook(target)
+        object.destroy(500)
+      }
+      )
+      object.importBook.connect(function() {
+        fileDialog.open()
+      }
+      )
     }
 
-    // listen pages
-    Rectangle {
-        id: listen
-        anchors.fill: parent
-        color: bg
-        opacity: (currentPage === 1)
-        Behavior on opacity { NumberAnimation { duration: 100 } }
-        Navigator {
-            id: listenNavi
-            page: 1
-            onNavigate: (target) => {
-                switch (target) {
-                    case 1: break;
-                    case 2: currentPage = 2;break;
-                    case 3: currentPage = 3;break;
-              }
-           }
-        }
+
+    function manageListenPage() {
+      var component = Qt.createComponent("ListenMainPage.qml")
+      var object
+      if (component.status === Component.Ready)
+        object = component.createObject(novelReader)
+
+      object.turnToPage.connect(function(target) {
+        console.log("Here", target)
+        changePage(target)
+        object.destroy(500)
+      }
+      )
+    }
+
+
+    function manageUserPage() {
+      var component = Qt.createComponent("UserMainPage.qml")
+      var object
+      if (component.status === Component.Ready)
+        object = component.createObject(novelReader)
+
+      object.turnToPage.connect(function(target) {
+        console.log("Here", target)
+        changePage(target)
+        object.destroy(500)
+      }
+      )
     }
 }
