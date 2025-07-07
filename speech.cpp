@@ -1,3 +1,6 @@
+//2023051604038zhangzhihao
+//一个可以运行的版本，只要将 utf8_text = 对应的string类型就可以，eSpeak本身不支持QList<QString>类型值，所以要实现一系列功能要通过线程等一系列操作
+
 #include "speech.h"
 #include <stdexcept>
 #include <iostream>
@@ -27,22 +30,23 @@ void Speech::setVolume(int volume) {
 }
 
 // 获取当前文本列表
-QList<QString> Speech::textList() const {
-   return m_textList;
-}
-
-// 设置新的文本列表，并触发信号
-void Speech::setTextList(const QList<QString>& newTextList) {
-if (m_textList != newTextList) {
-        m_textList = newTextList;
-//        emit textListChanged();  // 通知 QML 数据已更新
-   }
-}
-// 从 m_textList 中取出文本进行合成
-void Speech::speak()
+void Speech::speak(const QString& text)
 {
-    if (m_textList.isEmpty()) {
-        std::cerr << "Warning: No text to speak!" << std::endl;
+    std::string utf8_text = "测试";//
+    utf8_text += '\0';
+
+    int result = espeak_Synth(utf8_text.c_str(),
+                              utf8_text.size(),
+                              0,
+                              POS_CHARACTER,
+                              0,
+                              espeakCHARS_UTF8,
+                              nullptr,
+                              nullptr);
+
+    if (result != EE_OK) {
+        std::cerr << "Error synthesizing speech" << std::endl;
         return;
     }
+    espeak_Synchronize();
 }
