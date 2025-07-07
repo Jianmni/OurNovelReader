@@ -27,20 +27,22 @@ void Speech::setVolume(int volume) {
 }
 
 // 获取当前文本列表
-//QList<QString> Speech::textList() const {
-//   return m_textList;
-//}
+QList<QString> Speech::textList() const {
+   return m_textList;
+}
 
 // 设置新的文本列表，并触发信号
-//void Speech::setTextList(const QList<QString>& newTextList) {
-//if (m_textList != newTextList) {
-//        m_textList = newTextList;
+void Speech::setTextList(const QList<QString>& newTextList) {
+if (m_textList != newTextList) {
+        m_textList = newTextList;
 //        emit textListChanged();  // 通知 QML 数据已更新
-//    }
-//}
+   }
+}
 // 从 m_textList 中取出文本进行合成
-//void Speech::speak() {
-//    if (m_textList.isEmpty()) {
-//        std::cerr << "Warning: No text to speak!" << std::endl;
-//        return;
-//    }
+void Speech::speak()
+{
+    if (m_textList.isEmpty()) {
+        std::cerr << "Warning: No text to speak!" << std::endl;
+        return;
+    }
+}
