@@ -1,11 +1,17 @@
+// WF 2023051604037
+// 2025-7-7 - 2025-7-8
+// 阅读时，点击屏幕中央，呼出底部菜单
+// 菜单有：目录、笔记、进度、亮度、文字
+// 目前仅实现展示目录
 import QtQuick
 
 Rectangle {
     id: bottomMenu
     anchors.left: parent.left;      anchors.right: parent.right
-    height: 50
+    height: 40
     z: 2
     y: yPos
+    color: "#F8F8F8"
     property int yPos: parent.height
 
     // operations
@@ -18,8 +24,15 @@ Rectangle {
         id: content
         anchors.left: parent.left;  anchors.leftMargin: firstIcX
         anchors.verticalCenter: parent.verticalCenter
-        height: 40; width: 40
-        color: "red"
+        height: 32; width: 32
+        color: "#F8F8F8"
+        Icon {
+            anchors.fill: parent
+            color: "#F8F8F8"
+            src: "img/ic_content.png"
+            bounce: 1.01
+        }
+
         TapHandler {
             onTapped: {
                 showContent()
@@ -34,8 +47,14 @@ Rectangle {
         id: note
         anchors.left: content.left;  anchors.leftMargin: offset
         anchors.verticalCenter: parent.verticalCenter
-        height: 40; width: 40
-        color: "green"
+        height: 32; width: 32
+        color: "#F8F8F8"
+        Icon {
+            anchors.fill: parent
+            color: "#F8F8F8"
+            src: "img/ic_note.png"
+            bounce: 1.01
+        }
         TapHandler {
             onTapped: {
                 showNote()
@@ -50,8 +69,14 @@ Rectangle {
         id: progress
         anchors.left: note.left;  anchors.leftMargin: offset
         anchors.verticalCenter: parent.verticalCenter
-        height: 40; width: 40
-        color: "blue"
+        height: 32; width: 32
+        color: "#F8F8F8"
+        Icon {
+            anchors.fill: parent
+            color: "#F8F8F8"
+            src: "img/ic_progress.png"
+            bounce: 1.01
+        }
         TapHandler {
             onTapped: {
                 showProgressInfo()
@@ -66,8 +91,14 @@ Rectangle {
         id: brightness
         anchors.left: progress.left;  anchors.leftMargin: offset
         anchors.verticalCenter: parent.verticalCenter
-        height: 40; width: 40
-        color: "yellow"
+        height: 32; width: 32
+        color: "#F8F8F8"
+        Icon {
+            anchors.fill: parent
+            color: "#F8F8F8"
+            src: "img/ic_brightness.png"
+            bounce: 1.01
+        }
         TapHandler {
             onTapped: {
                 showBrightMenu()
@@ -82,8 +113,14 @@ Rectangle {
         id: textFont
         anchors.left: brightness.left;  anchors.leftMargin: offset
         anchors.verticalCenter: parent.verticalCenter
-        height: 40; width: 40
-        color: "gray"
+        height: 32; width: 32
+        color: "#F8F8F8"
+        Icon {
+            anchors.fill: parent
+            color: "#F8F8F8"
+            src: "img/ic_font.png"
+            bounce: 1.01
+        }
         TapHandler {
             onTapped: {
                 showFontMenu()
@@ -100,7 +137,7 @@ Rectangle {
         target: bottomMenu
         property: "y"
         from: yPos
-        to: yPos - 50
+        to: yPos - 40
         duration: 200
     }
 
@@ -114,7 +151,7 @@ Rectangle {
         id: hideAnimation
         target: bottomMenu
         property: "y"
-        from: yPos - 50
+        from: yPos - 40
         to: yPos
         duration: 200
     }

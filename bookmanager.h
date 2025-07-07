@@ -1,6 +1,7 @@
 // WF 2023051604037
-// first complete at 2025/6/19
+// 2025-6-19 -- 2025-7-8
 // manage the opaeration of load local txt
+// 书籍管理，管理书籍的添加、删除、信息读取
 #pragma once
 #include <QObject>
 #include <QList>

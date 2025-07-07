@@ -45,6 +45,8 @@ RESOURCES
     img/ic_drtNameLeft.png img/ic_drtNameRight.png img/ic_tip.png
 
 RESOURCES BrightnessControl.java
+RESOURCES img/ic_brightness.png img/ic_content.png img/ic_font.png img/ic_note.png img/ic_progress.png
+RESOURCES img/ic_quitRead.png
 )
 
 source_group ("QML Files" FILES

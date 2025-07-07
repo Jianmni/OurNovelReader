@@ -19,6 +19,8 @@ BookListManager::BookListManager(QObject *parent)
     }
 }
 
+// 初次运行程序时，初始化BookList.json文件，向其中写入笔记簿的信息
+// 初始化笔记簿，创建其目录、首章内容、信息
 bool BookListManager::initBookList()
 {
     QDir dir(".");
@@ -28,10 +30,21 @@ bool BookListManager::initBookList()
 
     // 笔记簿的目录
     QFile content("books/1/content.txt");
-    content.open(QIODeviceBase::NewOnly);
+    content.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite);
+    QTextStream cttOut(&content);
+    cttOut << "(^V^) 欢迎\n";
     // 笔记簿的信息
     QFile noteInfo("books/1/info.txt");
-    noteInfo.open(QIODeviceBase::NewOnly);
+    noteInfo.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite);
+    QTextStream infoOut(&noteInfo);
+    infoOut << 0 << "\n" << 0 << "\n"  << 0 << "\n"
+            << "笔记簿\n" << "ShaJian-WF\n"
+            << 0 << "\n" << 0 << "\n"  << 0 << "\n"
+            << "欢迎使用本程序-NovelReader\n";
+    QFile initCpt("books/1/1.txt");
+    initCpt.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite);
+    QTextStream cptOut(&initCpt);
+    cptOut << "(^V^)\n" << "欢迎\n" << "感谢使用本程序\n此书为笔记簿\n";
 
     // booklist 信息
     QFile file("books/booklist.json");
@@ -74,6 +87,7 @@ bool BookListManager::initBookList()
 }
 
 // get info from json file
+// 从BookList.json文件中获取书籍信息，用于书架Shelf展示书籍
 bool BookListManager::load() {
     QFile file("books/booklist.json");
     if (!file.open(QIODevice::ReadOnly)) {
@@ -116,6 +130,8 @@ bool BookListManager::load() {
 }
 
 // write changes to json file
+// 在添加或删除书籍操作完成后保存
+// 在对书籍排序操作完成后保存
 bool BookListManager::save() {
     QFile file("books/booklist.json");
     if (!file.open(QIODevice::WriteOnly)) {
@@ -210,6 +226,7 @@ int BookListManager::getBookPos(int id) const {
     return -1;
 }
 
+// 获取书籍的阅读顺序，用于书架书籍排序
 QList<QVariant> BookListManager::getReadOrder()
 {
     QList<QVariant> ret {};
@@ -224,6 +241,7 @@ QList<QVariant> BookListManager::getReadOrder()
     return ret;
 }
 
+// 获取书籍的加入顺序，用于书架书籍排序
 QList<QVariant> BookListManager::getJoinOrder()
 {
     QList<QVariant> ret {};
@@ -235,6 +253,7 @@ QList<QVariant> BookListManager::getJoinOrder()
     return ret;
 }
 
+// 阅读书籍时，改变阅读顺序
 void BookListManager::changeReadOrder(int bookId)
 {
     QJsonArray tmp {};

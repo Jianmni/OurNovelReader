@@ -1,27 +1,38 @@
 // WF 2023051604037
+// 2025-6-19  --  2025-7-8
+// 主组件，动态地加载每个界面
 /*
 tree
 |_NovelReader
   |_BookManager(C++)
     |_BookListManager
     |_LoadTxt
-  |_Listen
+  |_ConfigManager(C++)
+  |_ListenMainPage
     |_Listen
     |_Navigator
-  |_Shlef
+  |_ShlefMainPage
     |_BookListManager(C++)
     |_Search
     |_Shelf
     |_Navigator
-  |_Read
+  |_ReadMainPage
     |_ReadEngine(C++)
     |_textManager(C++)
-    |_ReadPage
+    |_ReadControl
     |_ReadManager
-  |_User
-    |_Info
+    |_CoverPage
+    |_TopMenu
+    |_BottomMenu
+    |_ContentBoard
+    |_NoteBoard
+    |_ProgressBoard
+    |_BrightBoard
+    |_FontBoard
+  |_UserMainPage
+    |_User
     |_Navigator
-    |_Edit (info)
+  |_Icon
 */
 import QtQuick
 import QtQuick.Controls
@@ -78,8 +89,8 @@ ApplicationWindow {
       }
     }
     onOpenBook: target => {
-                  manageBook(target)
-                }
+      manageBook(target)
+    }
 
     ConfigManager {
         id: config
@@ -142,8 +153,14 @@ ApplicationWindow {
     function manageBook(bkID: int) {
       var readConfig = config.getReadConfig()
       var component = Qt.createComponent("ReadControl.qml");
+      var object
       if (component.status === Component.Ready)
-          component.createObject(novelReader, {bookId: bkID, config: readConfig});
-
+          object = component.createObject(novelReader, {bookId: bkID, config: readConfig});
+      object.quitRead.connect(function() {
+        console.log("Quit read")
+        changePage(2)
+        object.destroy(500)
+      }
+      )
     }
 }

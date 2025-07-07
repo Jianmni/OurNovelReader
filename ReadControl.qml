@@ -1,8 +1,11 @@
 // WF 2023051604037
+// 2025-6-?  -- 2025-7-8
 // show contexts of a book
 // it's header shows chapter's id and name
 // it's footer shows curret time and read progress(current page/total page)
 // it's body shows contexts, chapter id and name
+// 阅读控制
+// 根据配置，加载文本、调用程序格式化文本，传递数据
 import QtQuick
 
 import NovelReader
@@ -12,6 +15,8 @@ Rectangle {
     anchors.fill: parent
     color: bg
     property int readWidth: width
+
+    signal quitRead
 
     // config
     property color bg: "#FAFAFA"
@@ -269,6 +274,7 @@ Rectangle {
         id: topMenu
         onQuitRead: {
             save()
+            parent.quitRead()
         }
         onHandleHide: {
             hide()

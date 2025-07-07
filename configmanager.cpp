@@ -9,6 +9,7 @@ ConfigManager::ConfigManager()
     loadConfig();
 }
 
+// 首次运行程序，文件不存在，初始化
 void ConfigManager::initConfig()
 {
     QDir dir(".");
@@ -54,6 +55,8 @@ void ConfigManager::initConfig()
     config.write(doc.toJson());
 }
 
+// 获取阅读的配置
+// 送给NovelReader， 再给PageControl
 QList<QVariant> ConfigManager::getReadConfig()
 {
     QList<QVariant> ret {};
@@ -69,6 +72,8 @@ QList<QVariant> ConfigManager::getReadConfig()
     return ret;
 }
 
+// 获取用户信息配置
+// 送给NovelReader，再给UserMainPage
 QList<QVariant> ConfigManager::getUserConfig()
 {
     QList<QVariant> ret {};
@@ -79,6 +84,8 @@ QList<QVariant> ConfigManager::getUserConfig()
     return ret;
 }
 
+// 获取播放配置
+// 送给NovelReader，再给ListenMainPage
 QList<QVariant> ConfigManager::getListenConfig()
 {
     QList<QVariant> ret {};
@@ -90,6 +97,7 @@ QList<QVariant> ConfigManager::getListenConfig()
     return ret;
 }
 
+// 配置被修改时，更新
 void ConfigManager::updateReadConfig(const QList<QVariant> config)
 {
 
@@ -105,6 +113,7 @@ void ConfigManager::updateListenConfig(const QList<QVariant> config)
 
 }
 
+// 程序运行时，加载配置并保存
 void ConfigManager::loadConfig()
 {
     QFile config(m_configPath);
@@ -128,6 +137,7 @@ void ConfigManager::loadConfig()
     m_listen = obj["listen"].toObject();
 }
 
+// 更新配置，写入到文件中
 void ConfigManager::updateConfig()
 {
     QFile config(m_configPath);

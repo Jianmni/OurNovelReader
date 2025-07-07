@@ -8,6 +8,9 @@ ReadEngin::ReadEngin(QObject *parent)
     m_bookPath += "books/";             // ./books/
 }
 
+// 阅读时PageControl调用
+// 根据书籍id加载书籍信息
+// 一次调用后书籍路径保存，后面的操作不需要提供id
 QList<QVariant> ReadEngin::loadBookReadInfo(int bkId)   // call only once for a book
 {
     m_bookPath += tr("%1/").arg(bkId);  // ./books/1/
@@ -37,6 +40,7 @@ QList<QVariant> ReadEngin::loadBookReadInfo(int bkId)   // call only once for a 
     return ret;
 }
 
+// 加载书籍目录
 QList<QString> ReadEngin::loadBookContent()
 {
     QList<QString> ret {};
@@ -58,6 +62,7 @@ QList<QString> ReadEngin::loadBookContent()
     return ret;
 }
 
+// 加载书籍章节
 QList<QString> ReadEngin::loadChapter(int chapterId)
 {
     QList<QString> ret {};
@@ -79,6 +84,7 @@ QList<QString> ReadEngin::loadChapter(int chapterId)
     return ret;
 }
 
+// 保存进度：当前章节、当前页，阅读时长
 void ReadEngin::writeProgress(int curContent, int curPage, int hour, int minu, int seco)
 {
     QString bookInfoPath = m_bookPath + "info.txt";

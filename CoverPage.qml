@@ -51,7 +51,7 @@ Rectangle {
             id: auTxt
             anchors.top: parent.top;    anchors.topMargin: 15
             anchors.horizontalCenter: parent.horizontalCenter
-            text: auname
+            text: "作者"
             font.pixelSize: 14
             color: "#9B9B9B"
         }
@@ -92,7 +92,7 @@ Rectangle {
                 id: aunm
                 anchors.top: parent.top
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("佚名")
+                text: auname
                 font.pixelSize: 18
             }
 

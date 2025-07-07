@@ -1,6 +1,9 @@
 // WF 2023051604037
-// first complete at 2025/6/9
+// 2025-6-9 -- 2025-7-8
 // 1-Load txt file, seperate chapters into different txt files
+// 加载本地文本
+// 处理文本
+// 书籍书籍删除操作
 #pragma once
 
 #include <QObject>

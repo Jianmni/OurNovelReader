@@ -12,6 +12,7 @@ BookManager::BookManager(QObject *parent)
     connect(&m_loadTxt, &LoadTxt::shouldInit, &m_bookList, &BookListManager::initBookList);
 }
 
+// 添加本地书籍
 void BookManager::loadLocalFile(const QString &fileUrl) {
     QString path = fileUrl;
     path.remove(0,8);   // remove file:///
@@ -26,22 +27,31 @@ void BookManager::loadLocalFile(const QString &fileUrl) {
     // else if (type == "pdf") // load pdf
 }
 
+// 删除书籍
+// 将BookList.json中的存在设为false，实际数量减一，改变排序
+// 删除保存的正文文本
 void BookManager::deleteBook(int id)
 {
     m_bookList.deleteBook(id);
     m_loadTxt.deleteBook(id);
 }
 
+// 获取数据阅读顺序
+// 送给书架Shelf
 QList<QVariant> BookManager::shelfBooksReadOrder()
 {
     return m_bookList.getReadOrder();
 }
 
+// 获取书籍的加入顺序
+// 送给书架Shelf
 QList<QVariant> BookManager::shelfBooksJoinOrder()
 {
     return m_bookList.getJoinOrder();
 }
 
+// 导入本地书籍
+// 2025-7-8： 目前仅实现一种格式的导入。文本从网站http://www.shukuge.com/下载
 void BookManager::loadTxtFile(const QString &path)
 {
     int id = m_bookList.bookSum();

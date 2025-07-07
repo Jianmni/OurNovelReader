@@ -1,5 +1,7 @@
 // WF 2023051604037
-// this file is a use full component
+// this file is a useful component
+// 底部导航
+// 进入软件时，点击按钮跳转播放、书架、用户界面
 import QtQuick
 
 Rectangle {
