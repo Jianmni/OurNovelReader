@@ -21,11 +21,11 @@ Rectangle {
         from: 0
         to: 1.0
         value: 1
-        onValueChanged: {
-            QtAndroid.callStaticMethod("com/example/BrightnessControl",
-                                      "setWindowBrightness",
-                                      [QtAndroid.activity, value]);
-        }
+        // onValueChanged: {
+        //     QtAndroid.callStaticMethod("com/example/BrightnessControl",
+        //                               "setWindowBrightness",
+        //                               [QtAndroid.activity, value]);
+        // }
     }
 
     function show(){

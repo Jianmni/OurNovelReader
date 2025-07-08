@@ -1,6 +1,7 @@
 // WF 2023051604037
 // this file is a component of BookModel.qml
 // used to conveniently build icon
+// 图标，可调用来便捷地展示图标
 import QtQuick
 
 Rectangle {

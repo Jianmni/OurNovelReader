@@ -25,6 +25,7 @@ public:
 
 private:
     void loadTxtFile(const QString &path);
+    void loadTestFile();
 
 signals:
     void getbookReadOrder();

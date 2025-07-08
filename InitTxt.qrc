@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/novel">
+        <file>testFile/武动乾坤.txt</file>
+    </qresource>
+</RCC>

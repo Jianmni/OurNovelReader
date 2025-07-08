@@ -83,6 +83,7 @@ bool BookListManager::initBookList()
     m_readOrder = {1};
     m_joinOrder = {1};
     m_bookIdName.insert(1, "笔记簿");
+
     return true;
 }
 
@@ -96,6 +97,7 @@ bool BookListManager::load() {
             qWarning() << "On load: File open failed: books/booklist.json";
             return false;
         }
+        emit finishInit();
         return true;    // init success
     }
 

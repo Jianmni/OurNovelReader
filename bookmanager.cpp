@@ -7,6 +7,7 @@
 BookManager::BookManager(QObject *parent)
     : QObject(parent)
 {
+    connect(&m_bookList, &BookListManager::finishInit, this, &BookManager::loadTestFile);
     m_bookList.load();
 
     connect(&m_loadTxt, &LoadTxt::shouldInit, &m_bookList, &BookListManager::initBookList);
@@ -71,4 +72,10 @@ void BookManager::loadTxtFile(const QString &path)
     // load cover img
 
     emit addFinished();
+}
+
+void BookManager::loadTestFile()
+{
+    qWarning() << "Ok Init";
+    loadTxtFile(":/novel/testFile/武动乾坤.txt");
 }

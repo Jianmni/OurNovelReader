@@ -24,6 +24,7 @@ SOURCES booklistmanager.cpp booklistmanager.h
         configmanager.h configmanager.cpp
         textmanager.h textmanager.cpp
         loadtxt.cpp loadtxt.h
+        androidpermission.cpp androidpermission.h
         main.cpp
 
 QML_FILES Shelf.qml Search.qml ShelfMainPage.qml
@@ -43,10 +44,10 @@ RESOURCES
     img/onlitsen.png img/onread.png img/onuser.png img/read.png img/user.png
     img/head.jpg img/0.jpg
     img/ic_drtNameLeft.png img/ic_drtNameRight.png img/ic_tip.png
+    img/ic_brightness.png img/ic_content.png img/ic_font.png img/ic_note.png
+    img/ic_progress.png img/ic_quitRead.png
 
-RESOURCES BrightnessControl.java
-RESOURCES img/ic_brightness.png img/ic_content.png img/ic_font.png img/ic_note.png img/ic_progress.png
-RESOURCES img/ic_quitRead.png
+RESOURCES InitTxt.qrc
 )
 
 source_group ("QML Files" FILES

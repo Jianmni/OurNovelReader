@@ -38,6 +38,7 @@ public:
 
 signals:
     void shouldInit();
+    void finishInit();
 
 private:
     int m_sum = 1;

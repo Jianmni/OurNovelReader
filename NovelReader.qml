@@ -69,6 +69,32 @@ ApplicationWindow {
         }
     }
 
+    AndroidPermission {
+        id: androidPermission
+
+        onPermissionGranted: function(permission) {
+            console.log("权限授予:", permission)
+            initStorage()
+        }
+
+        onPermissionDenied: function(permission) {
+            console.log("权限拒绝:", permission)
+        }
+    }
+
+    function checkPermissions() {
+        var permissions = [
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+        ]
+
+        for (var i = 0; i < permissions.length; i++) {
+            if (!androidPermission.checkPermission(permissions[i])) {
+                androidPermission.requestPermission(permissions[i])
+            }
+        }
+    }
+
 
     /************************************* Pages ****************************************/
     // load dynamically
@@ -78,6 +104,7 @@ ApplicationWindow {
     signal changePage(target: int)
     signal openBook(target: int)
     Component.onCompleted: {
+      checkPermissions()
       manageShelfPage()
     }
 
