@@ -16,15 +16,12 @@ public:
     explicit Speech(QObject *parent = nullptr);
     ~Speech();
 
-    Q_INVOKABLE void setVoice(const QString& voice_name);//关于输出语音语言的功能
-    Q_INVOKABLE void setRate(int words_per_minute);//语速
-    Q_INVOKABLE void setVolume(int volume);//声音大小
+    Q_INVOKABLE void setVoice(const QString& voice_name);
+    Q_INVOKABLE void setRate(int words_per_minute);
+    Q_INVOKABLE void setVolume(int volume);
+    Q_INVOKABLE void speak(const QString& text);
 
-    Q_INVOKABLE void speak();//输出内容
-    QList<QString> textList() const;
-    Q_INVOKABLE void setTextList(const QList<QString>& newTextList);
 private:
-    QList<QString> m_textList;  // 存储待合成的文本列表，
     Speech(const Speech&) = delete;
     Speech& operator=(const Speech&) = delete;
 };

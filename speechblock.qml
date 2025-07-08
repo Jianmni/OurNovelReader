@@ -4,8 +4,8 @@ import QtQuick.Layouts
 
 Rectangle {
     id: speechblock
-    width: 400
-    height: 600
+//    width: 400
+//    height: 600
 
     Column {
         anchors.fill: parent
@@ -50,25 +50,44 @@ Rectangle {
 //
 //            text: qsTr("text")
 //        }
+    //语种，在这里没有什么用，但可能成为需求
+        RowLayout {
+            Layout.fillWidth: true
 
-        Row {
-            id: btnvioce
-            spacing: 10
-            anchors.horizontalCenter: parent.horizontalCenter
+            Label { text: "Voice:" }
+            ComboBox {
+                id: voiceCombo
+                model: ["cmn","en"]
+                Layout.fillWidth: true
+            }
+        }
     //语速
-            Button {
-                id: speechRate
-                text: qsTr("语速")
-                width: 80
-                height: 40
+        RowLayout {
+            Layout.fillWidth: true
+
+            Label { text: "Speed:" }
+            Slider {
+                id: speedSlider
+                from: 80
+                to: 400
+                value: 160
+                Layout.fillWidth: true
             }
+            Label { text: speedSlider.value.toFixed(0) }
+        }
     //音量
-            Button {
-                id:speechVolme
-                text: qsTr("音量")
-                width: 80
-                height: 40
+        RowLayout {
+            Layout.fillWidth: true
+
+            Label { text: "Volume:" }
+            Slider {
+                id: volumeSlider
+                from: 0
+                to: 200
+                value: 100
+                Layout.fillWidth: true
             }
+            Label { text: volumeSlider.value.toFixed(0) }
         }
 
 
@@ -88,6 +107,7 @@ Rectangle {
                 icon.source: ""
                 width: 40
                 height: 40
+//                onClicked: speak(pause)
             }
 
             Button {
