@@ -1,7 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDir>
-
 #include <QQmlContext>  // 添加这行
 
 int main(int argc, char *argv[])

@@ -5,11 +5,26 @@
 #include <QDateTime>
 #include <QDir>
 
+#include <QStandardPaths>
+#include "MacroSet.h"
+
 BookListManager::BookListManager(QObject *parent)
     : QObject(parent)
 {
     // init when constructed
-    QFile file("books/booklist.json");
+    QString listPath {"books/booklist.json"};
+#ifdef ANDROID_DEVELOP
+    cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    QDir dir(cachePath);
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
+    cachePath += '/';
+    qWarning() << "OK" + cachePath;
+    listPath = cachePath + listPath;
+#endif
+
+    QFile file(listPath);
     if (!file.open(QIODevice::ReadOnly)) {  // create failed: file does not exist
         initBookList();
     }
@@ -23,25 +38,37 @@ BookListManager::BookListManager(QObject *parent)
 // 初始化笔记簿，创建其目录、首章内容、信息
 bool BookListManager::initBookList()
 {
-    QDir dir(".");
+    QString bookdir {"."};
+#ifdef ANDROID_DEVELOP
+    bookdir = cachePath;
+#endif
+    QDir dir(bookdir);
     if (!dir.exists("books"))
         dir.mkdir("books");
     dir.mkdir("books/1");
 
+    QString cttPath {"books/1/content.txt"};
+    QString notePath {"books/1/info.txt"};
+    QString intCptPath {"books/1/1.txt"};
+#ifdef ANDROID_DEVELOP
+    cttPath = cachePath + cttPath;
+    notePath = cachePath + notePath;
+    intCptPath = cachePath + intCptPath;
+#endif
     // 笔记簿的目录
-    QFile content("books/1/content.txt");
+    QFile content(cttPath);
     content.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite);
     QTextStream cttOut(&content);
     cttOut << "(^V^) 欢迎\n";
     // 笔记簿的信息
-    QFile noteInfo("books/1/info.txt");
+    QFile noteInfo(notePath);
     noteInfo.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite);
     QTextStream infoOut(&noteInfo);
     infoOut << 0 << "\n" << 0 << "\n"  << 0 << "\n"
             << "笔记簿\n" << "ShaJian-WF\n"
             << 0 << "\n" << 0 << "\n"  << 0 << "\n"
             << "欢迎使用本程序-NovelReader\n";
-    QFile initCpt("books/1/1.txt");
+    QFile initCpt(intCptPath);
     initCpt.open(QIODeviceBase::NewOnly | QIODeviceBase::ReadWrite);
     QTextStream cptOut(&initCpt);
     cptOut << "(^V^)\n" << "欢迎\n" << "感谢使用本程序\n此书为笔记簿\n";
@@ -90,7 +117,11 @@ bool BookListManager::initBookList()
 // get info from json file
 // 从BookList.json文件中获取书籍信息，用于书架Shelf展示书籍
 bool BookListManager::load() {
-    QFile file("books/booklist.json");
+    QString listPath {"books/booklist.json"};
+#ifdef ANDROID_DEVELOP
+    listPath = cachePath + listPath;
+#endif
+    QFile file(listPath);
     if (!file.open(QIODevice::ReadOnly)) {
         if (!initBookList())
         {
@@ -135,7 +166,11 @@ bool BookListManager::load() {
 // 在添加或删除书籍操作完成后保存
 // 在对书籍排序操作完成后保存
 bool BookListManager::save() {
-    QFile file("books/booklist.json");
+    QString listPath {"books/booklist.json"};
+#ifdef ANDROID_DEVELOP
+    listPath = cachePath + listPath;
+#endif
+    QFile file(listPath);
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning() << "On save: File open failed: books/booklist.json";
         return false;

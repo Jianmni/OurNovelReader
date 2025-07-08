@@ -5,6 +5,7 @@ project(NovelReader VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -24,7 +25,6 @@ SOURCES booklistmanager.cpp booklistmanager.h
         configmanager.h configmanager.cpp
         textmanager.h textmanager.cpp
         loadtxt.cpp loadtxt.h
-        androidpermission.cpp androidpermission.h
         main.cpp
 
 QML_FILES Shelf.qml Search.qml ShelfMainPage.qml
@@ -48,6 +48,7 @@ RESOURCES
     img/ic_progress.png img/ic_quitRead.png
 
 RESOURCES InitTxt.qrc
+SOURCES MacroSet.h
 )
 
 source_group ("QML Files" FILES
@@ -68,6 +69,7 @@ set_target_properties(appNovelReader PROPERTIES
 
 target_link_libraries(appNovelReader
     PRIVATE Qt6::Quick
+    PRIVATE Qt6::Core
 )
 
 include(GNUInstallDirs)

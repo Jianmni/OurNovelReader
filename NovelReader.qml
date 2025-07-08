@@ -69,6 +69,7 @@ ApplicationWindow {
         }
     }
 
+    /*
     AndroidPermission {
         id: androidPermission
 
@@ -81,6 +82,7 @@ ApplicationWindow {
             console.log("权限拒绝:", permission)
         }
     }
+    */
 
     function checkPermissions() {
         var permissions = [
@@ -104,7 +106,7 @@ ApplicationWindow {
     signal changePage(target: int)
     signal openBook(target: int)
     Component.onCompleted: {
-      checkPermissions()
+      // checkPermissions()
       manageShelfPage()
     }
 
