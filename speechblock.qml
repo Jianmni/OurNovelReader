@@ -1,8 +1,101 @@
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-Rectangle{
+Rectangle {
     id: speechblock
-    anchors.left: parent.left;  anchors.right: parent.right
-    color: bg    // bg
-    property color bg: "#FAFAFA"
+    width: 400
+    height: 600
+
+    Column {
+        anchors.fill: parent
+        spacing: 10
+//返回按钮
+        Button {
+                    text: "返回"
+                    anchors.right: parent.right
+                    anchors.leftMargin: 10
+                    onClicked: {
+                        // 假设使用StackView导航，返回上一页
+                        if (typeof stackView !== "undefined") {
+                            stackView.pop()
+                        }
+                    }
+                }
+        Text {
+            id: speechbooknm
+            text: qsTr("书名\n第0章")
+            font.pixelSize: 24
+            anchors.left: parent.left
+        }
+
+        Rectangle {
+            id:bookImageRec
+            width: 300
+            height: 200
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "lightgray"  // 背景色
+
+            Image {
+                id: bookImage
+                source: ""  // 设置实际图片路径
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+            }
+        }
+    //正在阅读的句子展示,在QListQstring可行的情况下使用
+//        Text {
+//            id: cts
+//            anchors.horizontalCenter: parent.horizontalCenter
+//
+//            text: qsTr("text")
+//        }
+
+        Row {
+            id: btnvioce
+            spacing: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+    //语速
+            Button {
+                id: speechRate
+                text: qsTr("语速")
+                width: 80
+                height: 40
+            }
+    //音量
+            Button {
+                id:speechVolme
+                text: qsTr("音量")
+                width: 80
+                height: 40
+            }
+        }
+
+
+        Row{
+            id:btnplaySet
+            anchors.horizontalCenter: parent.horizontalCenter
+            Button {
+                id: last
+
+                icon.source: ""
+                width: 40
+                height: 40
+            }
+
+            Button {
+                id: pause
+                icon.source: ""
+                width: 40
+                height: 40
+            }
+
+            Button {
+                id: next
+                icon.source: ""
+                width: 40
+                height: 40
+            }
+        }
+    }
 }
