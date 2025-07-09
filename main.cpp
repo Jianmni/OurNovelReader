@@ -1,7 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QDir>
-#include <QQmlContext>  // 添加这行
+#include <QQmlContext>
+#include <QStandardPaths>
 
 int main(int argc, char *argv[])
 {
@@ -22,8 +23,6 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("NovelReader", "NovelReader");
 
-        QGuiApplication app(argc, argv);
-
         // 获取并准备存储路径
         QString storagePath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
         storagePath.append(QStringLiteral("/novels/"));
@@ -39,8 +38,6 @@ int main(int argc, char *argv[])
 
         // 确保路径格式正确
         storagePath = QDir::cleanPath(storagePath) + QLatin1String("/");
-
-        QQmlApplicationEngine engine;
 
         //设置上下文属性
         engine.rootContext()->setContextProperty(QStringLiteral("appStoragePath"), storagePath);

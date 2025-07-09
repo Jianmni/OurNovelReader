@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QJsonDocument>
 
 ConfigManager::ConfigManager()
 {
