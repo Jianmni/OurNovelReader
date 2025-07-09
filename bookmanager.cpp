@@ -7,8 +7,10 @@
 BookManager::BookManager(QObject *parent)
     : QObject(parent)
 {
-    connect(&m_bookList, &BookListManager::finishInit, this, &BookManager::loadTestFile);
+    // this slot won't be called when finishInit signal emitted
+    // connect(&m_bookList, &BookListManager::finishInit, this, &BookManager::loadTestFile);
     m_bookList.load();
+    if(m_bookList.isFirstRun()) loadTestFile(); // use this way
 
     connect(&m_loadTxt, &LoadTxt::shouldInit, &m_bookList, &BookListManager::initBookList);
 }
@@ -76,6 +78,6 @@ void BookManager::loadTxtFile(const QString &path)
 
 void BookManager::loadTestFile()
 {
-    qWarning() << "Ok Init";
+    // qWarning() << "Ok Init";
     loadTxtFile(":/novel/testFile/武动乾坤.txt");
 }

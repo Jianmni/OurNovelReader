@@ -8,6 +8,7 @@ Rectangle {
     height: bdHeight
     anchors.left: parent.left;      anchors.right: parent.right
     y: yPos
+    z: 2
     color: bg
 
     property int bdHeight: parent.height / 3

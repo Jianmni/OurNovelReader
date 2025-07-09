@@ -8,6 +8,7 @@ Rectangle {
     anchors.left: parent.left;  anchors.right: parent.right
     height: parent.height - 40
     y: yPos
+    z: 2
     property int yPos: parent.height
     property color bg: "#FAFAFA"
 

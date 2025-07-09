@@ -9,7 +9,7 @@ Rectangle {
     id: bottomMenu
     anchors.left: parent.left;      anchors.right: parent.right
     height: 40
-    z: 2
+    z: 3
     y: yPos
     color: "#F8F8F8"
     property int yPos: parent.height

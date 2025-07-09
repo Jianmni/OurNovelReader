@@ -6,6 +6,7 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    app.setApplicationDisplayName("小说阅读");
 
     QQmlApplicationEngine engine;
 

@@ -7,6 +7,7 @@
 
 #include <QStandardPaths>
 #include "MacroSet.h"
+// #include "bookmanager.h"
 
 BookListManager::BookListManager(QObject *parent)
     : QObject(parent)
@@ -111,6 +112,9 @@ bool BookListManager::initBookList()
     m_joinOrder = {1};
     m_bookIdName.insert(1, "笔记簿");
 
+    emit finishInit();
+    qDebug() << "First Run";
+    m_firstRun = true;
     return true;
 }
 
@@ -128,7 +132,6 @@ bool BookListManager::load() {
             qWarning() << "On load: File open failed: books/booklist.json";
             return false;
         }
-        emit finishInit();
         return true;    // init success
     }
 

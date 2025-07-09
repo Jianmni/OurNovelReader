@@ -36,6 +36,8 @@ public:
                                         // is not the first  in bookshelf
                                         // in an incremental way
 
+    bool isFirstRun() {return m_firstRun;}
+
 signals:
     void shouldInit();
     void finishInit();
@@ -47,4 +49,6 @@ private:
     QJsonArray m_bookList = QJsonArray();
     QJsonArray m_readOrder = {1};
     QJsonArray m_joinOrder = {1};
+
+    bool m_firstRun = false;
 };
