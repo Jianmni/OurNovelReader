@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+#找到espeak-ng
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(ESPEAK QUIET espeak-ng)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -18,6 +21,8 @@ qt_add_qml_module(appNovelReader
     VERSION 1.0
     QML_FILES
     NovelReader.qml
+
+
 
 SOURCES booklistmanager.cpp booklistmanager.h
         bookmanager.cpp bookmanager.h
@@ -49,6 +54,10 @@ RESOURCES
 
 RESOURCES InitTxt.qrc
 SOURCES MacroSet.h
+SOURCES
+SOURCES
+SOURCES bookselector.h bookselector.cpp
+SOURCES texttospeech.h texttospeech.cpp
 )
 
 source_group ("QML Files" FILES
@@ -58,6 +67,8 @@ source_group ("QML Files" FILES
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
+
+
 set_target_properties(appNovelReader PROPERTIES
     AUTORCC true
 #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appNovelReader
@@ -71,6 +82,12 @@ target_link_libraries(appNovelReader
     PRIVATE Qt6::Quick
     PRIVATE Qt6::Core
 )
+#包含espeak目录和连接库
+if(ESPEAK_FOUND)
+    target_include_directories(appNovelReader PRIVATE ${ESPEAK_INCLUDE_DIRS})
+    target_link_libraries(appNovelReader PRIVATE ${ESPEAK_LIBRARIES})
+    target_compile_definitions(appNovelReader PRIVATE USE_ESPEAK_NG=1)
+endif()
 
 include(GNUInstallDirs)
 install(TARGETS appNovelReader
