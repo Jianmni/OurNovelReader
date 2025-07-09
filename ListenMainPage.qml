@@ -17,13 +17,14 @@ Rectangle {
 
     ColumnLayout{
         anchors.fill: parent
+        anchors.bottomMargin: 60
     //创建实例
         BookSelector{
             id:bookSelector
         }
         TextToSpeech {
-                id: ttsEngine
-            }
+            id: ttsEngine
+        }
 
         RowLayout {
             spacing: 10
@@ -126,7 +127,7 @@ Rectangle {
                 id: speedSlider
                 from: 80
                 to: 200
-                value: 100
+                value: 160
                 Layout.fillWidth: true
             }
             Label { text: speedSlider.value.toFixed(0) }
@@ -147,6 +148,7 @@ Rectangle {
         }
         //播放
         Button {
+            id:btnSpeak
             text: "Speak"
             Layout.fillWidth: true
             onClicked: {
@@ -155,9 +157,29 @@ Rectangle {
                 ttsEngine.setVolume(volumeSlider.value)
                 ttsEngine.speak(bookSelector.chapterContent)
             }
+        }
+        RowLayout{
+            //上，播放，暂停，下
+            Button {
+                    id: prevChapterBtn
+                    text: "<"
+                    enabled: bookSelector.currentChapterIndex > 0
+                    onClicked: bookSelector.previousChapter()
+                }
 
+                Button {
+                    text: ttsEngine.isSpeaking ? "暂停" : "继续"
+                    onClicked: ttsEngine.isSpeaking ? ttsEngine.pause() : ttsEngine.resume()
+                }
+
+                Button {
+                    id: nextChapterBtn
+                    text: ">"
+                    enabled: bookSelector.currentChapterIndex < (bookSelector.chapterList.length - 1)
+                    onClicked: bookSelector.nextChapter()
+                }
+        }
     }
-
     Navigator {
         id: navi
         page: 1
@@ -165,6 +187,5 @@ Rectangle {
         onNavigate: (target) => {
             if(target !== 1) turnToPage(target)
         }
-    }
     }
 }
